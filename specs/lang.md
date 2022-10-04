@@ -2,15 +2,13 @@
 
 ## Data Types
 
-- Integer types: integer number signed with two's complement representation
-  - long  | i64 | size: 8 bytes
-  - int   | i32 : 4 bytes
-  - short | i16 : 2 bytes
+- Integer types:
+  - signed integer (two's complement)
+    - i8, i16, i32, i64
+  - unsigned integer
+    - ui8, ui16, ui32, ui64
 - Floating point types:
-  - double | f64: IEEE 8 bytes representation
-  - float  | f32: IEEE 4 bytes representation
-- Character types:
-  - char | c8: 1 byte
+  - f32, f64
 - boolean types:
   - bool: single byte, false if zero, true otherwise
 
@@ -21,10 +19,43 @@
 ## Operations
 
 - `=`: Attribution
+  - `<type> <id> = <value>`
 
 ### Logical Operations
+
+Logical operations, results in a boolean value.
+
+For non-boolean operands, zero means `false`, otherwise `true`.
+
+```Sintax: <operand> <op> <operand>```
+
+- `&&`: and
+- `||`: or
+- `!` : not
+  - `! <operand>`
+
 ### Relational Operations
+
+Comparation expressions, results in a boolean value.
+
+```Sintax: <operand> <op> <operand>```
+
+- `==`: equality
+- `!=`: not equal
+- `>=`: more than or equal
+- `<=`: less than or equal
+- `>`:  more than
+- `<`:  less than
+
 ### Arithmetic Operations
+
+```Sintax: <operand> <op> <operand>```
+
+- `+`: sum
+- `-`: subtraction
+- `*`: multiplication
+- `/`: division
+- `%`: module
 
 ### Flow Control Statements
 ### Identifiers and KeyWords
