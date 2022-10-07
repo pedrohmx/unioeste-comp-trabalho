@@ -38,7 +38,8 @@ For non-boolean operands, zero means `false`, otherwise `true`.
 
 Comparation expressions, results in a boolean value.
 
-```Sintax: <operand> <op> <operand>```
+Sintax
+``` <operand> <op> <operand>```
 
 - `==`: equality
 - `!=`: not equal
@@ -49,7 +50,8 @@ Comparation expressions, results in a boolean value.
 
 ### Arithmetic Operations
 
-```Sintax: <operand> <op> <operand>```
+Sintax
+```<operand> <op> <operand>```
 
 - `+`: sum
 - `-`: subtraction
@@ -59,7 +61,7 @@ Comparation expressions, results in a boolean value.
 
 ### Flow Control Statements
 
-Conditionals
+#### Conditionals
 
 - `if`: checks a statement (enclosed by parenthesis) and if its true, runs the following code block (enclosed by curly brackets)
 - `else`: must be after an if statement and its statements/code block, runs a following code block if the condition in the if statement is false
@@ -76,7 +78,7 @@ if (<cond_expr>) {
   <stmts>
 }
 ```
-
+Exemple
 ```
 if (age < 18) {
   write "can't drink or drive"
@@ -87,7 +89,42 @@ if (age < 18) {
 }
 ```
 
+#### Loops
+
+- `while`: repeats statements in followed block while condition is true.
+  - `while(<cond_expr>){<stmts>}`
+- `for`:
+  - `for (<setup>;<cond_expr>;<post>) {<stmts>}`
+
+Syntax
+```
+i32 i = 0;
+while (i < 2) {
+  write "Reese's puffs\n";
+}
+
+
+for (i = 0; i < 3; i += 1) {
+  write "Eat them up\n"
+}
+
+# Output:
+# Reese's puffs
+# Reese's puffs
+# Eat them up
+# Eat them up
+# Eat them up
+```
+
 ### Identifiers and KeyWords
+
+#### Identifiers
+
+...
+#### IO Statements
+
+- `read`: ...
+- `write`: ...
 
 ## EBNF Specification
 
