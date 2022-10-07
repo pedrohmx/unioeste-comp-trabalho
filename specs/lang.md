@@ -58,6 +58,35 @@ Comparation expressions, results in a boolean value.
 - `%`: module
 
 ### Flow Control Statements
+
+Conditionals
+
+- `if`: checks a statement (enclosed by parenthesis) and if its true, runs the following code block (enclosed by curly brackets)
+- `else`: must be after an if statement and its statements/code block, runs a following code block if the condition in the if statement is false
+- `elif`: aka poor man's switch, equivalent to an if just after else, must be after an if or an elif statement, has its own conditional expression and code block, may be folloed be else or another elif 
+
+
+Syntax
+```
+if (<cond_expr>) {
+  <stmts> 
+} elif (<cond_expr>) {
+  <stmts>
+} else {
+  <stmts>
+}
+```
+
+```
+if (age < 18) {
+  write "can't drink or drive"
+} elif (age < 99) {
+  write "can drink and drive"
+} else {
+  write "can't play with legos"
+}
+```
+
 ### Identifiers and KeyWords
 
 ## EBNF Specification
