@@ -89,9 +89,17 @@ and is equivalent to `<variable> = <variable> <op> <value>`.
 - `-=`: subtraction
 - `*=`: multiplication
 - `/=`: division
-- `%=`: modul
+- `%=`: module
 
-#### Increment and Decrement
+<!-- ### Bitwise Operations
+
+- `&`: bitwise and.
+- `|`: bitwise and.
+- `&`: bitwise and.
+- `<<`: left shift.
+- `>>`: right shift. -->
+
+### Increment and Decrement
 
 - increment:
   - `<variable>++`
