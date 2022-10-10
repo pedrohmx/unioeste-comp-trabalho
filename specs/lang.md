@@ -4,22 +4,40 @@
 
 - Integer types:
   - signed integer (two's complement)
-    - i8, i16, i32, i64
+    - i8, i16, i32, i64.
   - unsigned integer
-    - ui8, ui16, ui32, ui64
+    - ui8, ui16, ui32, ui64.
 - Floating point types:
-  - f32, f64
+  - f32, f64.
 - boolean types:
-  - bool: single byte, false if zero, true otherwise
+  - bool: single byte, false if zero, true otherwise.
 
 ## Symbols
 
-- `#`: Comments, reasoning being compatibility with shebang expressions on script files
+- `#`: Comments, reasoning being compatibility with shebang expressions on script files.
+
+### Literals
+
+- String Literal: Any text enclosed in `""` is a string literal.
+  - Exemple: `"Hello there!"`.
+  - Cannot be attributed to a variable, but can be usend with the write statement.
+- Integer Literal: Any sequence of numbers.
+  - Exemple: `42`, `-13` ...
+- Float Literal: Any sequence of numbers starting with a dot or with a dot in the sequence.
+  - Exemple: `4.2`, `.5`
+- Boolean Literal: `true`, `false`
 
 ## Operations
 
 - `=`: Attribution
-  - `<type> <id> = <value>`
+  - `<type> <id> = <value>;`
+  - `<type> <id>;`
+
+- Exemples
+  - `<type> <id> = <value>, <id> = <value>;`
+  - `<type> <id> = <value>, <id>;`
+  - `<type> <id>, <id> = <value>;`
+  - `<type> <id>, <id>;`
 
 ### Logical Operations
 
@@ -50,7 +68,7 @@ Sintax
 
 ### Arithmetic Operations
 
-Sintax
+Syntax:
 ```<operand> <op> <operand>```
 
 - `+`: sum
@@ -58,6 +76,27 @@ Sintax
 - `*`: multiplication
 - `/`: division
 - `%`: module
+
+#### Arithmetic Attributions
+
+You may also update the value of a variable using the following expression:
+
+`<variable> <op> = <value>`
+
+and is equivalent to `<variable> = <variable> <op> <value>`.
+
+- `+=`: sum
+- `-=`: subtraction
+- `*=`: multiplication
+- `/=`: division
+- `%=`: modul
+
+#### Increment and Decrement
+
+- increment:
+  - `<variable>++`
+- decrement:
+  - `<variable>--`
 
 ### Flow Control Statements
 
@@ -97,6 +136,7 @@ if (age < 18) {
   - `for (<setup>;<cond_expr>;<post>) {<stmts>}`
 
 Syntax
+
 ```
 i32 i = 0;
 while (i < 2) {
@@ -120,11 +160,31 @@ for (i = 0; i < 3; i += 1) {
 
 #### Identifiers
 
-...
+Variables must be identified with unique names, these unique names are called identifiers.
+
+An identifier must start with a letter or underscore, and might follow with any sequence of alphanumeric characters (plus underscore).
+
+Exemples:
+
+```
+i32 minutes = 60;
+i32 _something = -1;
+i32 MyVariableIs = 0;
+i32 _123 = 123;
+```
+
 #### IO Statements
 
-- `read`: ...
-- `write`: ...
+- `read`: reads from stdin and sets value on variable
+  - Syntax: `read <variable>;`
+- `write`: writes to stdout, can write variables and literals;
+  - is possible to write multiple expressions separated by commas.
+  - Syntax
+    - `write <writables>;`
+  - Examples:
+    - `write <variable>;` 
+    - `write <variable>, <variable>;` 
+    - `write <literal>, <variable>;` 
 
 ## EBNF Specification
 
