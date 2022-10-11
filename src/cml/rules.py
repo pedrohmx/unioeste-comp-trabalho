@@ -54,35 +54,38 @@ cml_rules = [
     Rule(name='comma', pattern=r'\,', alias=','),
     Rule(name='end',   pattern=r'\;', alias=';'),
 
-    # Operations - logical
-    Rule(name='equals',     pattern=r'\=\=', alias='op'),
-    Rule(name='not_equals', pattern=r'\!\=', alias='op'),
-    Rule(name='less_equal', pattern=r'\<\=', alias='op'),
-    Rule(name='more_equal', pattern=r'\>\=', alias='op'),
-    Rule(name='or',         pattern=r'\|\|', alias='op'),
-    Rule(name='and',        pattern=r'\&\&', alias='op'),
-    Rule(name='less_than',  pattern=r'\<',   alias='op'),
-    Rule(name='more_than',  pattern=r'\>',   alias='op'),
+    # Operations - Relational
+    Rule(name='equals',     pattern=r'\=\=', alias='op_rel'),
+    Rule(name='not_equals', pattern=r'\!\=', alias='op_rel'),
+    Rule(name='less_equal', pattern=r'\<\=', alias='op_rel'),
+    Rule(name='more_equal', pattern=r'\>\=', alias='op_rel'),
+    Rule(name='less_than',  pattern=r'\<',   alias='op_rel'),
+    Rule(name='more_than',  pattern=r'\>',   alias='op_rel'),
+
+    # Operations - Logical
+    Rule(name='or',         pattern=r'\|\|', alias='op_log'),
+    Rule(name='and',        pattern=r'\&\&', alias='op_log'),
+    Rule(name='not',        pattern=r'\!',   alias='op_log'),
     
     # Operations - inplace
-    Rule(name='increment',  pattern=r'\+\+', alias='op'),
-    Rule(name='decrement',  pattern=r'\-\-', alias='op'),
+    Rule(name='increment',  pattern=r'\+\+', alias='op_inc'),
+    Rule(name='decrement',  pattern=r'\-\-', alias='op_inc'),
 
     # Attributions
-    Rule(name='attrib', pattern=r'\=',  alias='op'),
+    Rule(name='attrib', pattern=r'\='),
     # Attributions - arithmetic
-    Rule(name='a_sum', pattern=r'\+\=', alias='op'),
-    Rule(name='a_sub', pattern=r'\-\=', alias='op'),
-    Rule(name='a_mul', pattern=r'\*\=', alias='op'),
-    Rule(name='a_div', pattern=r'\/\=', alias='op'),
-    Rule(name='a_mod', pattern=r'\%\=', alias='op'),
+    Rule(name='a_sum', pattern=r'\+\=', alias='attrib_op'),
+    Rule(name='a_sub', pattern=r'\-\=', alias='attrib_op'),
+    Rule(name='a_mul', pattern=r'\*\=', alias='attrib_op'),
+    Rule(name='a_div', pattern=r'\/\=', alias='attrib_op'),
+    Rule(name='a_mod', pattern=r'\%\=', alias='attrib_op'),
 
     # Operations - arithmetic
-    Rule(name='sum', pattern=r'\+', alias='op'),
-    Rule(name='sub', pattern=r'\-', alias='op'),
-    Rule(name='mul', pattern=r'\*', alias='op'),
-    Rule(name='div', pattern=r'\/', alias='op'),
-    Rule(name='mod', pattern=r'\%', alias='op'),
+    Rule(name='sum', pattern=r'\+', alias='op_sum'),
+    Rule(name='sub', pattern=r'\-', alias='op_sum'),
+    Rule(name='mul', pattern=r'\*', alias='op_mul'),
+    Rule(name='div', pattern=r'\/', alias='op_mul'),
+    Rule(name='mod', pattern=r'\%', alias='op_mul'),
 
     # White space
     Rule(name='newline', pattern=r'\n'),
