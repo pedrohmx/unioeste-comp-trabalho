@@ -57,7 +57,7 @@ For non-boolean operands, zero means `false`, otherwise `true`.
 Comparation expressions, results in a boolean value.
 
 Sintax
-``` <operand> <op> <operand>```
+```<operand> <op> <operand>```
 
 - `==`: equality
 - `!=`: not equal
@@ -112,11 +112,11 @@ and is equivalent to `<variable> = <variable> <op> <value>`.
 
 - `if`: checks a statement (enclosed by parenthesis) and if its true, runs the following code block (enclosed by curly brackets)
 - `else`: must be after an if statement and its statements/code block, runs a following code block if the condition in the if statement is false
-- `elif`: aka poor man's switch, equivalent to an if just after else, must be after an if or an elif statement, has its own conditional expression and code block, may be folloed be else or another elif 
-
+- `elif`: aka poor man's switch, equivalent to an if just after else, must be after an if or an elif statement, has its own conditional expression and code block, may be folloed be else or another elif
 
 Syntax
-```
+
+```text
 if (<cond_expr>) {
   <stmts> 
 } elif (<cond_expr>) {
@@ -125,8 +125,10 @@ if (<cond_expr>) {
   <stmts>
 }
 ```
+
 Exemple
-```
+
+```text
 if (age < 18) {
   write "can't drink or drive"
 } elif (age < 99) {
@@ -145,7 +147,7 @@ if (age < 18) {
 
 Syntax
 
-```
+```text
 i32 i = 0;
 while (i < 2) {
   write "Reese's puffs\n";
@@ -174,7 +176,7 @@ An identifier must start with a letter or underscore, and might follow with any 
 
 Exemples:
 
-```
+```text
 i32 minutes = 60;
 i32 _something = -1;
 i32 MyVariableIs = 0;
@@ -190,10 +192,10 @@ i32 _123 = 123;
   - Syntax
     - `write <writables>;`
   - Examples:
-    - `write <variable>;` 
-    - `write <variable>, <variable>;` 
-    - `write <literal>, <variable>;` 
+    - `write <variable>;`
+    - `write <variable>, <variable>;`
+    - `write <literal>, <variable>;`
 
 ## EBNF Specification
 
-
+TODO: @pedrohmx do BNF specification
