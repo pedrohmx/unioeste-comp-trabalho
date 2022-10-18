@@ -34,3 +34,24 @@ Este repositório contém a especificação da linguagem de programação C+- (C
 1. [ ] Arquivo `.pdf` contendo os itens descritos em 1.1;
 2. [ ] Código fonte do Analisador Léxico, com instruções para compilação e execução;
 3. [ ] Exemplo de código fonte da linguagem especificada para teste do analisador;
+
+## Instruções de uso
+
+### Requisitos
+
+- Interpretador python 3.10
+  - Pacotes especificados em `src/requirements.txt`
+
+### Como utilizar
+
+>Para acessar a pagina de manual, execute o seguinte comando
+
+```sh
+python -m path/to/cml
+```
+
+>Tokenizar um arquivo de codigo fonte
+
+```sh
+python -m path.to.cml lex SOURCE
+```
