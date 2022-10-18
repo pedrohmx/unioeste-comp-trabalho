@@ -2,6 +2,9 @@
 
 from pathlib import Path
 from typer import Typer
+from rich.console import Console
+from rich.text import Text
+from rich.table import Table
 
 from .lexer import tokenize, Token
 from .rules import cml_rules
@@ -9,7 +12,7 @@ from .rules import cml_rules
 app = Typer(no_args_is_help=True)
 
 @app.command('lex', no_args_is_help=True)
-def lex(source: Path):
+def lex(source: Path, color: bool = False):
     '''
     Tokenize source code.
     '''
@@ -19,8 +22,31 @@ def lex(source: Path):
     tokens: list[Token]
     with open(source, 'r') as f:
         tokens = tokenize(f.read(), cml_rules, source.name)
-    for t in tokens:
-        print(t)
+
+    console = Console()
+    
+    grid = Table.grid(padding=(0, 5))
+
+    grid.add_column()
+    grid.add_column(justify="right")
+    grid.add_column(justify="right")
+
+    if color:
+        for t in tokens:
+            warn = t.name == 'unknown'
+            grid.add_row(
+                Text.assemble((t.file, 'gray'),(t.pos, 'green' if not warn else 'yellow')),
+                Text(t.name, 'green' if not warn else 'red'),
+                Text(t.value, 'blue' if not warn else 'red')
+            )
+    else:
+        for t in tokens:
+            grid.add_row(
+                f'{t.file}{t.pos}',
+                t.name,
+                t.value
+            )
+    console.print(grid)
 
 
 @app.command('parse', no_args_is_help=True)

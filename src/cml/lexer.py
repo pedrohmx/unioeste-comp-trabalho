@@ -9,10 +9,11 @@ from .rules import Rule, cml_rules
 class Token:
     name:  str
     value: str
+    file:  str
     pos:   str
     span:  int
     def __repr__(self):
-        return f'< {self.pos} | {self.name} | {self.value} >'
+        return f'< {self.file + self.pos} | {self.name} | {self.value} >'
 
 def tokenize(source: str, rules: list[Rule], filename: str = ''):
     regex = '|'.join(f'(?P<{x.name}>{x.pattern})' for x in rules)
@@ -47,7 +48,8 @@ def tokenize(source: str, rules: list[Rule], filename: str = ''):
         tok = Token(
             name=token_name,
             value=token_lexeme,
-            pos=f'{filename}:{line}:{pos+1}',
+            file=filename,
+            pos=f':{line}:{pos+1}',
             span=match.end() - match.start()
         )
 
