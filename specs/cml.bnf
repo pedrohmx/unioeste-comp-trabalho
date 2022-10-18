@@ -1,0 +1,39 @@
+# CML lang BNF
+
+<program>::= <stmts>
+<stmts>::=
+    | <stmt>
+    | <stmt> ; <stmts> 
+    | ε
+<stmt>::=
+    | <decl> #TODO
+    | <attrib> #TODO
+    | <expr> #TODO
+    | <command> 
+<command>::=
+    | read <var> ;
+    | write <writables> ;
+    | <if>
+    | <while> #TODO
+    | <for> #TODO
+<writables>::= 
+    | <writable> 
+    | <writable> , <writables>
+<writable>::= 
+    | <literal>
+    | <var>
+<literal>::=
+    | <literal_int> 
+    | <literal_float> 
+    | <literal_bool> 
+    | <literal_str>
+<var>::= <id>
+<if>::=
+    | if ( <bool_expr> ) { <stmts> } <elif_chain> <else>
+<elif_chain>::= 
+    |elif ( <bool_expr> ) { <stmts> } <elif_chain> 
+    | ε
+<else>::= 
+    | else { <stmts> } 
+    | ε
+<while>::= while ( <bool_expr> ) { <stmts> }

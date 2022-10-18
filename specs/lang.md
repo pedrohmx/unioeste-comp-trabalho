@@ -102,9 +102,9 @@ and is equivalent to `<variable> = <variable> <op> <value>`.
 ### Increment and Decrement
 
 - increment:
-  - `<variable>++`
+  - `<variable> ++`
 - decrement:
-  - `<variable>--`
+  - `<variable> --`
 
 ### Flow Control Statements
 
