@@ -32,7 +32,7 @@ Este repositório contém a especificação da linguagem de programação C+- (C
 ### Entrega 1
 
 1. [ ] Arquivo `.pdf` contendo os itens descritos em 1.1;
-2. [ ] Código fonte do Analisador Léxico, com instruções para compilação e execução;
+2. [X] Código fonte do Analisador Léxico, com instruções para compilação e execução;
 3. [ ] Exemplo de código fonte da linguagem especificada para teste do analisador;
 
 ## Instruções de uso
@@ -47,7 +47,8 @@ Este repositório contém a especificação da linguagem de programação C+- (C
 >Para acessar a pagina de manual, execute o seguinte comando
 
 ```sh
-python -m path/to/cml
+# write path/to/cml as path.to.cml
+python -m path.to.cml
 ```
 
 >Tokenizar um arquivo de codigo fonte
