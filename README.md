@@ -11,11 +11,11 @@ Este repositório contém a especificação da linguagem de programação C+- (C
    2. [X] Operadores suportados (aritméticos, lógicos e relacionais).
    3. [X] Formação dos identificadores (regras para nomes de variaveis).
    4. [X] Comandos para entrada e saida.
-   5. Palavras reservadas.
+   5. [X] Palavras reservadas.
    6. [X] Estruturas suportadas pela linguagem.
    7. [ ] Estrutura geral do programa
 2. [X] Especificar as **Definições Regulares** e os **Automata** de reconhecimento dos símbolos adminidos
-3. Descrever formalmente usando BNF, a GLC da linguagem proposta.
+3. [X] Descrever formalmente usando BNF, a GLC da linguagem proposta.
    1. [X] BNF
    2. [ ] GLC
 
