@@ -1,0 +1,16 @@
+# fatorial
+
+i32 n, res = 1;
+write "entre com um numero\n";
+read n;
+
+if ( n > 0 ) {
+    write "calculando fatorial de ", n, "\n";
+    for (i32 i = 2; i <= n; i++) {
+        res *= i;
+    }
+    write "resultado: ", res, "\n"; 
+} else {
+    write "entrada invalida\n";
+}
+

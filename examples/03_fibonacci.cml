@@ -1,0 +1,12 @@
+# fatorial
+
+i32 n = 5, i = 1;
+
+write "calculando fatorial de ", n, "\n";
+
+while ( n > 1) {
+    i *= n;
+    n--;
+}
+ 
+write "resultado: ", i, "\n"; 
