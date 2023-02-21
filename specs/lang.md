@@ -47,10 +47,14 @@ For non-boolean operands, zero means `false`, otherwise `true`.
 
 ```Sintax: <operand> <op> <operand>```
 
-- `&&`: and
+<!-- - `&&`: and
 - `||`: or
 - `!` : not
-  - `! <operand>`
+  - `! <operand>` -->
+- and
+- or
+- not
+  - `not <operand>`
 
 ### Relational Operations
 
@@ -99,12 +103,12 @@ and is equivalent to `<variable> = <variable> <op> <value>`.
 - `<<`: left shift.
 - `>>`: right shift. -->
 
-### Increment and Decrement
+<!-- ### Increment and Decrement
 
 - increment:
   - `<variable> ++`
 - decrement:
-  - `<variable> --`
+  - `<variable> --` -->
 
 ### Flow Control Statements
 
@@ -116,11 +120,11 @@ and is equivalent to `<variable> = <variable> <op> <value>`.
 
 Syntax
 
+<!-- } elif (<cond_expr>) {
+  <stmts> -->
 ```text
 if (<cond_expr>) {
   <stmts> 
-} elif (<cond_expr>) {
-  <stmts>
 } else {
   <stmts>
 }
@@ -128,11 +132,11 @@ if (<cond_expr>) {
 
 Exemple
 
+<!-- } elif (age < 99) {
+  write "can drink and drive" -->
 ```text
 if (age < 18) {
   write "can't drink or drive"
-} elif (age < 99) {
-  write "can drink and drive"
 } else {
   write "can't play with legos"
 }
