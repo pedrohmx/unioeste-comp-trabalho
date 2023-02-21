@@ -2,25 +2,14 @@
 
 import re
 from pprint import pprint as pp
-from dataclasses import dataclass
-from .rules import Rule, cml_rules
-
-@dataclass
-class Token:
-    name:  str
-    value: str
-    file:  str
-    pos:   str
-    span:  int
-    def __repr__(self):
-        return f'< {self.file + self.pos} | {self.name} | {self.value} >'
+from .util import Rule, Token
 
 def tokenize(source: str, rules: list[Rule], filename: str = ''):
     regex = '|'.join(f'(?P<{x.name}>{x.pattern})' for x in rules)
     aliases = {x.name:x.alias for x in rules if x.alias}
 
     pos: int = 0
-    line: int = 1
+    line: int = 0
     line_start: int = 0
 
     tokens: list[Token] = []

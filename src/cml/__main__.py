@@ -7,7 +7,7 @@ from rich.text import Text
 from rich.table import Table
 
 from .lexer import tokenize, Token
-from .rules import cml_rules
+from .lang import cml_res
 
 app = Typer(no_args_is_help=True)
 
@@ -21,7 +21,7 @@ def lex(source: Path, color: bool = False):
         raise SystemExit(1)
     tokens: list[Token]
     with open(source, 'r') as f:
-        tokens = tokenize(f.read(), cml_rules, source.name)
+        tokens = tokenize(f.read(), cml_res, source.name)
 
     console = Console()
     

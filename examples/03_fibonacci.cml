@@ -6,7 +6,8 @@ write "calculando fatorial de ", n, "\n";
 
 while ( n > 1) {
     i *= n;
-    n--;
+    # n--;
+    n+=1;
 }
  
 write "resultado: ", i, "\n"; 
