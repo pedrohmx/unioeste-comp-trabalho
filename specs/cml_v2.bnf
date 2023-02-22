@@ -1,5 +1,11 @@
 # CML lang BNF
 
+## Built-ins
+#
+#- id
+#- op_sum, op_mul, bool_op
+#-
+
 <program>::= <stmts>
 <stmts>::=
     | <stmts> <stmt>
@@ -8,32 +14,33 @@
     | <decl_stmt>
     | <attrib_stmt>
     | <command>
-<decl>::= #TODO: remove prefix
-    | <type> <id>;
-    | <type> <id> = <expr>;
-<attrib_stmt>::= # TODO: remove prefix
-    | <var> = <expr>;
-    | <var> <attrib_op> <expr>;
+<decl>::=
+    | <type> <id> <decl_end> ;
+<decl_end>::=
+    | = <expr>
+    | ε
+<attrib_stmt>::=
+    | <var> <attrib_end> ;
+<attrib_end>::=
+    | = <expr>
+    | <attrib_op> <expr>
 <expr>::=
     | <arith_expr>
-    | <expr_bool>
+    | <bool_expr>
 <arith_expr>::= # TODO: remove prefix
-    | <arith_expr> + <arith_term>
-    | <arith_expr> - <arith_term>
+    | <arith_expr> <op_sum> <arith_term>
     | <arith_term>
 <arith_term>::=
-    | <arith_term> * <arith_term>
-    | <arith_term> / <arith_term>
-    | <arith_term> % <arith_term>
+    | <arith_term> <op_mul> <arith_term>
     | ( <arith_expr> )
     | <var>
     | <literal>
-<expr_bool>::= #TODO: remove prefix
-    | ! <expr_bool>
-    | <var> <rel_op> <var>
-    | (<expr_bool>) <op_bool> (<expr_bool>)
-    | <boolean> <op_bool> <boolean>
-    | <boolean>
+<bool_expr>::=
+    | not <bool_expr>
+    | <boolean> <bool_expr_chain>
+<bool_expr_chain>::=
+    | <bool_op> <boolean>
+    | ε
 <boolean>::=
     | <literal_bool>
     | <var>
@@ -43,9 +50,11 @@
     | <if_stmt>
     | <while_stmt>
     | <for_stmt>
-<writables>::= #TODO: remove prefix
-    | <writable> 
-    | <writable> , <writables>
+<writables>::=
+    | <writable> <writable_chain>
+<writable_chain>::=
+    | , <writable> <writable_chain>
+    | ε
 <writable>::= 
     | <literal>
     | <var>
@@ -59,10 +68,10 @@
     | true
     | false
 <var>::= <id>
-<if>::=
-    | if ( <expr_bool> ) { <stmts> } <else_stmt>
+<if_stmt>::=
+    | if ( <bool_expr> ) { <stmts> } <else_stmt>
 <else_stmt>::= 
     | else { <stmts> } 
     | ε
-<while_stmt>::= while ( <expr_bool> ) { <stmts> }
-<for_stmt>::= for ( <decl> ; <expr_bool> ; <attrib>) { <stmts> }
+<while_stmt>::= while ( <bool_expr> ) { <stmts> }
+<for_stmt>::= for ( <decl> ; <bool_expr> ; <attrib>) { <stmts> }
