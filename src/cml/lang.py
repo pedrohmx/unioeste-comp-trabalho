@@ -33,6 +33,8 @@ cml_res: list[Rule] = [
     Rule(name='literal_bin',   pattern=r'0b[0-1]+',    alias='literal_int'),
     Rule(name='literal_oct',   pattern=r'0o[0-7]+',    alias='literal_int'),
     Rule(name='literal_str',   pattern=r'\"[^\"\n]*"', alias='literal_string'),
+    Rule(name='literal_true',  pattern=r'true', alias='literal_bool'),
+    Rule(name='literal_false', pattern=r'false', alias='literal_bool'),
     
     # scopes
     Rule(name='left_parenthesis',  pattern=r'\(', alias='('),
@@ -73,11 +75,11 @@ cml_res: list[Rule] = [
     Rule(name='a_mod', pattern=r'\%\=', alias='attrib_op'),
 
     # Operations - arithmetic
-    Rule(name='sum', pattern=r'\+', alias='op_sum'),
-    Rule(name='sub', pattern=r'\-', alias='op_sum'),
-    Rule(name='mul', pattern=r'\*', alias='op_mul'),
-    Rule(name='div', pattern=r'\/', alias='op_mul'),
-    Rule(name='mod', pattern=r'\%', alias='op_mul'),
+    Rule(name='sum', pattern=r'\+', alias='arith_op_sum'),
+    Rule(name='sub', pattern=r'\-', alias='arith_op_sum'),
+    Rule(name='mul', pattern=r'\*', alias='arith_op_mul'),
+    Rule(name='div', pattern=r'\/', alias='arith_op_mul'),
+    Rule(name='mod', pattern=r'\%', alias='arith_op_mul'),
 
     # White space
     Rule(name='newline', pattern=r'\n'),
@@ -90,3 +92,37 @@ cml_res: list[Rule] = [
     # Missmatch
     Rule(name='missmatch', pattern=r'.', alias='unknown'),
 ]
+
+grammar: dict[
+    str,
+    str | list[str] | dict[
+        str,
+        list[
+            list[str]|
+            None]
+        ]
+    ] = {
+    "starter": "program",
+    "prod": {
+        "program": [['stmts']],
+        "stmts": [
+            ['stmts', 'stmt'],
+            None
+        ],
+        "decl_stmt": [['type', 'id', 'decl_end']],
+        "decl_end": [['attrib', 'expr'], None],
+        "attrib_stmt": [['var', 'attrib_end', ';']],
+        "attrib_end":[['attrib', 'expr'], ['attrib_op', 'expr']],
+        'expr': [['arith_expr'], ['bool_expr'], ['rel_expr']],
+    },
+    "term": [
+        'id', 'type', 'attrib',
+        'read', 'write', 'if', 'else', 'for', 'while', 'not',
+        'arith_op_sum', 'arith_op_mul', 'bool_op', 'rel_op', 'attrib_op',
+        ';', ',', '(', ')', '{', '}',
+        'literal_int', 'literal_float', 'literal_string', 'literal_bool', 
+    ],
+    "nterm": [
+        "program", "stmts", "stmt"
+    ],
+}

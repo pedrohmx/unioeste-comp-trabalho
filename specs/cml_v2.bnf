@@ -3,6 +3,7 @@
 ## Built-ins
 #
 #- id
+#- type
 #- arith_op_sum, arith_op_mul, bool_op, rel_op
 
 <program>::= <stmts>
@@ -13,7 +14,7 @@
     | <decl_stmt>
     | <attrib_stmt>
     | <command>
-<decl>::=
+<decl_stmt>::=
     | <type> <id> <decl_end> ;
 <decl_end>::=
     | = <expr>
