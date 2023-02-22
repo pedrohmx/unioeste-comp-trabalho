@@ -1,4 +1,4 @@
-from . import Rule
+from .util import Rule
 
 cml_res: list[Rule] = [
     # type keyworkds
@@ -47,17 +47,17 @@ cml_res: list[Rule] = [
     Rule(name='end',   pattern=r'\;', alias=';'),
 
     # Operations - Relational
-    Rule(name='equals',     pattern=r'\=\=', alias='op_rel'),
-    Rule(name='not_equals', pattern=r'\!\=', alias='op_rel'),
-    Rule(name='less_equal', pattern=r'\<\=', alias='op_rel'),
-    Rule(name='more_equal', pattern=r'\>\=', alias='op_rel'),
-    Rule(name='less_than',  pattern=r'\<',   alias='op_rel'),
-    Rule(name='more_than',  pattern=r'\>',   alias='op_rel'),
+    Rule(name='equals',     pattern=r'\=\=', alias='rel_op'),
+    Rule(name='not_equals', pattern=r'\!\=', alias='rel_op'),
+    Rule(name='less_equal', pattern=r'\<\=', alias='rel_op'),
+    Rule(name='more_equal', pattern=r'\>\=', alias='rel_op'),
+    Rule(name='less_than',  pattern=r'\<',   alias='rel_op'),
+    Rule(name='more_than',  pattern=r'\>',   alias='rel_op'),
 
     # Operations - Logical
-    Rule(name='or',         pattern=r'\|\|', alias='op_log'),
-    Rule(name='and',        pattern=r'\&\&', alias='op_log'),
-    Rule(name='not',        pattern=r'\!',   alias='op_log'),
+    Rule(name='or',         pattern=r'or',  alias='bool_op'),
+    Rule(name='and',        pattern=r'and', alias='bool_op'),
+    Rule(name='not',        pattern=r'not'),
     
     # Operations - inplace
     # Rule(name='increment',  pattern=r'\+\+', alias='op_inc'),
@@ -89,7 +89,4 @@ cml_res: list[Rule] = [
 
     # Missmatch
     Rule(name='missmatch', pattern=r'.', alias='unknown'),
-
-    # Rule(name='', pattern=r''),
-    # Rule(name='', pattern=r'', alias=''),
 ]
