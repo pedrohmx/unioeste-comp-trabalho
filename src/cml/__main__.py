@@ -7,6 +7,7 @@ from rich.text import Text
 from rich.table import Table
 
 from .lexer import tokenize, Token
+from .syntax import parse_syntax
 from .lang import cml_res
 
 app = Typer(no_args_is_help=True)
@@ -51,11 +52,20 @@ def lex(source: Path, color: bool = False):
 
 @app.command('parse', no_args_is_help=True)
 def parse(source: Path):
-    '''
-    Not implemented yet.
-    '''
-    print('Not implemented yet.')
-    raise SystemExit(1)
+    '''parse syntax'''
+    if not source.exists():
+        print("Source file does not exists, exiting.")
+        raise SystemExit(1)
+    tokens: list[Token]
+    with open(source, 'r') as f:
+        tokens = tokenize(f.read(), cml_res, source.name)
+    
+    # try:
+    result = parse_syntax(tokens=tokens)
+    # except ValueError as e:
+    #     print(e)
+    #     raise SystemExit(1)
+    raise SystemExit(0)
 
 if __name__ == '__main__':
     app()

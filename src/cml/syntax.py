@@ -1,46 +1,58 @@
 from .util import Token
-
-grammar: dict = {}
+from .lang import grammar_dev, slr_table
 
 def parse_syntax(tokens: list[Token]):
-    # load table
-    
-    # stacks
-    stack: list[int|str] = [0]
+    stack: list[int | str] = [0]
     input: list[str] = [t.name for t in tokens]
     input.append("$")
-    actions: list[str] = []
-    
+    actions: list[str | int] = []
+
     while True:
         cur_input = input[0]
-        cur_stack = stack[-1]
-        
-        table_line = grammar[cur_input]
-        action = table_line[cur_stack]
+        cur_state = stack[-1]
+
+        table_line = slr_table[cur_input]
+
+        action = str(table_line[int(cur_state)])  # type:ignore
         actions.append(action)
         
+        if action == 'e':
+            raise ValueError("Parser reached an invalid state and is throwing an error :(")
+
         if action == 'ACC':
             return True
-        
+
         if action[0] == 's':  # stack
             input.pop(0)
-            
+
             stack.append(cur_input)
-            stack.append(action[1:])
-        elif action[0] == 'r':  # reduce
+            stack.append(int(action[1:]))
+        
+        elif action[0] == 'r':  # reduce            
             # search reduce rule
-            rr = find_reduction_rule(int(action[1:]))
-            # apply reduction
-            rs = get_reduction_size(rr)
+            rr = grammar_dev[int(action[1:])]
+            
+            # get size to reduce
+            rs = len(rr['dev']) * 2
+            
             # change state
-            ns = ...
+            next_state = goto_lookup(index=stack[-1], symbol=rr['nonterm'])
+            # if 'e' in next_state:
+            #     raise ValueError("Invalid goto")
+            
+            # append reduction non terminal
+            stack.append(rr['nonterm'])  # type:ignore
             # add current state to stack
-            stack.append(...) # append reduction non terminal
-            stack.append(ns)
+            stack.append(int(next_state))  # type:ignore
         else:  # ???
             raise ValueError("Invalid action")
+    return False
 
 
-# stubs
-def find_reduction_rule(i: int) -> dict: ...
-def get_reduction_size(d: dict) -> int: ...
+def goto_lookup(index, symbol):
+    try:
+        i = int(index)
+        res = slr_table[symbol][i]
+        return res
+    except Exception as e:
+        print(e)
