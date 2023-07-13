@@ -8,9 +8,10 @@ from rich.table import Table
 
 from .lexer import tokenize, Token
 from .syntax import parse_syntax
-from .lang import cml_res
+from .lang import cml_rules
 
 app = Typer(no_args_is_help=True)
+
 
 @app.command('lex', no_args_is_help=True)
 def lex(source: Path, color: bool = False):
@@ -22,10 +23,10 @@ def lex(source: Path, color: bool = False):
         raise SystemExit(1)
     tokens: list[Token]
     with open(source, 'r') as f:
-        tokens = tokenize(f.read(), cml_res, source.name)
+        tokens = tokenize(f.read(), cml_rules, source.name)
 
     console = Console()
-    
+
     grid = Table.grid(padding=(0, 5))
 
     grid.add_column()
@@ -36,7 +37,7 @@ def lex(source: Path, color: bool = False):
         for t in tokens:
             warn = t.name == 'unknown'
             grid.add_row(
-                Text.assemble((t.file, 'gray'),(t.pos, 'green' if not warn else 'yellow')),
+                Text.assemble((t.file, 'gray'), (t.pos, 'green' if not warn else 'yellow')),
                 Text(t.name, 'green' if not warn else 'red'),
                 Text(t.value, 'blue' if not warn else 'red')
             )
@@ -58,14 +59,19 @@ def parse(source: Path):
         raise SystemExit(1)
     tokens: list[Token]
     with open(source, 'r') as f:
-        tokens = tokenize(f.read(), cml_res, source.name)
-    
-    # try:
-    result = parse_syntax(tokens=tokens)
-    # except ValueError as e:
-    #     print(e)
-    #     raise SystemExit(1)
+        tokens = tokenize(f.read(), cml_rules, source.name)
+
+    result, ok, err = parse_syntax(tokens=tokens)
+    if result:
+        print("Syntax ok")
+    else:
+        print("Error parsing syntax.")
+        print("Obs: Some errors only occurs due to previous errors.")
+        print("Unexpected tokens at:")
+        for token in err:
+            print(token)
     raise SystemExit(0)
+
 
 if __name__ == '__main__':
     app()

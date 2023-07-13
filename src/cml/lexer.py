@@ -1,15 +1,16 @@
 # lexer
 
 import re
-from pprint import pprint as pp
+# from pprint import pprint as pp
 from .util import Rule, Token
+
 
 def tokenize(source: str, rules: list[Rule], filename: str = ''):
     regex = '|'.join(f'(?P<{x.name}>{x.pattern})' for x in rules)
-    aliases = {x.name:x.alias for x in rules if x.alias}
+    aliases = {x.name: x.alias for x in rules if x.alias}
 
     pos: int = 0
-    line: int = 0
+    line: int = 1
     line_start: int = 0
 
     tokens: list[Token] = []
@@ -25,7 +26,7 @@ def tokenize(source: str, rules: list[Rule], filename: str = ''):
         token_lexeme = match.group(token_name)
         if token_name in aliases:
             token_name = aliases[token_name]
-        
+
         if token_name in ['newline', 'comment']:
             line_start = match.end()
             line += 1

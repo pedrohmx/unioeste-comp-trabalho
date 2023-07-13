@@ -9,7 +9,7 @@ read n;
 
 if ( n > 0 ) {
     write "calculando fatorial de ", n, "\n";
-    for (i32 i = 2; i <= n; i++) {
+    for (i32 i = 2; i <= n; i+=1) {
         res *= i;
     }
     write "resultado: ", res, "\n"; 

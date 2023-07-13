@@ -1,58 +1,87 @@
 from .util import Token
-from .lang import grammar_dev, slr_table
+from .lang import cml_grammar, cml_table
 
-def parse_syntax(tokens: list[Token]):
-    stack: list[int | str] = [0]
-    input: list[str] = [t.name for t in tokens]
-    input.append("$")
-    actions: list[str | int] = []
+
+def parse_syntax(tokens: list[Token], empty="^"):
+    stack: list[str] = ["0"]
+    # tk_input: list[str] = [t.name for t in tokens if t.name != "unknown"]
+    tk_input: list[Token] = [t for t in tokens if t.name != "unknown"]
+    tk_input.append(Token(name='$', value='$', file='', pos='', span=-1))
+    actions: list[str] = []
+
+    tk_read: list[Token] = []
+    tk_errors: list[Token] = []
+
+    result = True
 
     while True:
-        cur_input = input[0]
+        cur_input = tk_input[0]
         cur_state = stack[-1]
 
-        table_line = slr_table[cur_input]
+        # print(f"> stack: {stack}")
+        # print(f"> input: {input}")
+        # print(f"> actions: {actions}")
+        # print(f"> cur input: {cur_input}")
+        # print(f"> cur state: {cur_state}")
 
-        action = str(table_line[int(cur_state)])  # type:ignore
+        action = cml_table[cur_state][cur_input.name]
         actions.append(action)
-        
-        if action == 'e':
-            raise ValueError("Parser reached an invalid state and is throwing an error :(")
 
-        if action == 'ACC':
-            return True
+        if action == "e":
+            result = False
+            # print('[ERROR]: parsing error')
+            # print(f'> {stack=}')
+            # print(f'> {cur_input}')
+            # strategy 1 - clear stack
+            stack = ["0"]
+            tk_errors.append(tk_input.pop(0))
+            continue
+            # # change to warn and consume the error
+            # # fixme: do a proper implementation after finithing the reduction
+            # raise ValueError("Parser reached an invalid state and is throwing an error :(")
 
-        if action[0] == 's':  # stack
-            input.pop(0)
+        if action == "acc":
+            break
 
-            stack.append(cur_input)
-            stack.append(int(action[1:]))
-        
-        elif action[0] == 'r':  # reduce            
+        if action[0] == "s":  # stack
+            tk_read.append(tk_input.pop(0))
+
+            stack.append(cur_input.name)
+            stack.append(action[1:])
+
+        elif action[0] == "r":  # reduce
             # search reduce rule
-            rr = grammar_dev[int(action[1:])]
-            
+            r_rule = cml_grammar[int(action[1:])]
+
             # get size to reduce
-            rs = len(rr['dev']) * 2
-            
+            r_size = 0
+            if r_rule["body"] and r_rule["body"][0] != empty:
+                r_size = len(r_rule["body"]) * 2
+
+            # reduce stack
+            if r_size:
+                stack = stack[:-r_size]
+
             # change state
-            next_state = goto_lookup(index=stack[-1], symbol=rr['nonterm'])
-            # if 'e' in next_state:
-            #     raise ValueError("Invalid goto")
-            
+            next_state = goto_lookup(index=stack[-1], symbol=r_rule["head"])
+            if next_state == "e":
+                print(f"Goto Error when index={stack[-1]} and symbol={r_rule['head']}")
+
             # append reduction non terminal
-            stack.append(rr['nonterm'])  # type:ignore
+            stack.append(r_rule["head"])
             # add current state to stack
-            stack.append(int(next_state))  # type:ignore
-        else:  # ???
+            stack.append(next_state)
+        else:
             raise ValueError("Invalid action")
-    return False
+        # print("-"*64)
+    return result, tk_read, tk_errors
 
 
-def goto_lookup(index, symbol):
+def goto_lookup(index: int | str, symbol: str) -> str:
     try:
-        i = int(index)
-        res = slr_table[symbol][i]
+        i = str(index)
+        res = cml_table[i][symbol]
         return res
     except Exception as e:
         print(e)
+    return ""
