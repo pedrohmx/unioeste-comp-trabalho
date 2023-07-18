@@ -6,7 +6,7 @@ def parse_syntax(tokens: list[Token], empty="^"):
     stack: list[str] = ["0"]
     # tk_input: list[str] = [t.name for t in tokens if t.name != "unknown"]
     tk_input: list[Token] = [t for t in tokens if t.name != "unknown"]
-    tk_input.append(Token(name='$', value='$', file='', pos='', span=-1))
+    tk_input.append(Token(name="$", value="$", file="", pos="", span=-1))
     actions: list[str] = []
 
     tk_read: list[Token] = []
