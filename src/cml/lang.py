@@ -2,10 +2,15 @@ import os
 import json
 from .util import Rule, GrammarRule
 
-cml_grammar: list[GrammarRule] = json.load(open(os.path.join(os.path.dirname(__file__), 'grammar.json')))
+cml_grammar: list[GrammarRule] = json.load(
+    open(os.path.join(os.path.dirname(__file__), "grammar.json"))
+)
 
-# cml_table: dict[str, dict[str, str]] = json.load(open(os.path.join(os.path.dirname(__file__), 'table.json')))
-cml_table: dict[str, dict[str, str]] = json.load(open(os.path.join(os.path.dirname(__file__), 'table.json')))
+# cml_table: dict[str, dict[str, str]]
+#   = json.load(open(os.path.join(os.path.dirname(__file__), 'table.json')))
+cml_table: dict[str, dict[str, str]] = json.load(
+    open(os.path.join(os.path.dirname(__file__), "table.json"))
+)
 
 cml_rules: list[Rule] = [
     # type keyworkds

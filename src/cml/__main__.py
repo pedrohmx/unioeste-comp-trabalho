@@ -37,7 +37,10 @@ def lex(source: Path, color: bool = False):
         for t in tokens:
             warn = t.name == 'unknown'
             grid.add_row(
-                Text.assemble((t.file, 'gray'), (t.pos, 'green' if not warn else 'yellow')),
+                Text.assemble(
+                    (t.file, 'gray'),
+                    (t.pos, 'green' if not warn else 'yellow')
+                ),
                 Text(t.name, 'green' if not warn else 'red'),
                 Text(t.value, 'blue' if not warn else 'red')
             )
