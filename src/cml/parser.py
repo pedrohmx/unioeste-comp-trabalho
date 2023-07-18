@@ -1,4 +1,4 @@
-from .util import Token
+from .util import Token, Node
 from .lang import cml_grammar, cml_table
 
 
@@ -85,3 +85,27 @@ def goto_lookup(index: int | str, symbol: str) -> str:
     except Exception as e:
         print(e)
     return ""
+
+
+def parse_semantics(in_tokens: list[Token]):
+    tokens = in_tokens[::-1]
+
+    # aux functions
+    def peek() -> Token | None:
+        return tokens[-1] if tokens else None
+
+    def consume(expected_token_type: str):
+        token = peek()
+        if token and token.name == expected_token_type:
+            return tokens.pop()
+        else:
+            print(f'[error:sem] Expected {expected_token_type}, found {token.name if token else None}')
+
+    code_buffer = []
+
+    # Grammar rules for CML
+
+    def program(): ...
+    def stmts(): ...
+    def stmt(): ...
+

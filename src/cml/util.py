@@ -23,7 +23,23 @@ class Token:
     span: int
 
     def __repr__(self):
-        return f"< {self.file + self.pos} | {self.name} | {self.value} >"
+        return f"<{self.file + self.pos} | {self.name} | {self.value}>"
+
+
+@dataclass
+class Node():
+    node_type: str
+    value: Any
+    children: list['Node'] = list()
+
+    def __repr__(self) -> str:
+        if self.children:
+            children_str = ", ".join(repr(child) for child in self.children)
+            return f"Node({self.node_type}, [{children_str}])"
+        elif self.value is not None:
+            return f"Node({self.node_type}, value={self.value})"
+        else:
+            return f"Node({self.node_type})"
 
 
 @dataclass

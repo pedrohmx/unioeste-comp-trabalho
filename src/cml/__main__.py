@@ -37,7 +37,7 @@ def compile(source: Path, output: str = "cml.3addr.txt"):
 
     parse_result, ok, err = parse_syntax(tokens=tokens)
     if parse_result:
-        print("[info:comp] parse ok.")
+        print("[info:comp] syntax ok.")
     else:
         print("[error:parse] halting...")
         print("[error:parse] errors @")

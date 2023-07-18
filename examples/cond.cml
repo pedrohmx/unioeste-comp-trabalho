@@ -1,0 +1,8 @@
+# condicionais
+i32 num = 25;
+
+if ( num > 0 ) {
+  write "number is positive", "\n";
+} else {
+  write "number is not positive", "\n";
+}
