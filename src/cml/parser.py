@@ -82,7 +82,9 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                 case {"head": "STMTS", "body": ["STMTS", "STMT"]}: ...
                 case {"head": "STMT", "body": ["ATTRIB_STMT", ";"]}: ...
                 case {"head": "STMT", "body": ["FLOW"]}: ...
-                case {"head": "STMT", "body": ["DECL_STMT", ";"]}: ...
+                case {"head": "STMT", "body": ["DECL_STMT", ";"]}:
+                    cur_stack = []
+                    ...
                 case {"head": "STMT", "body": ["COMMAND", ";"]}: ...
                 case {"head": "DECL_STMT", "body": ["type", "id", "DECL_END"]}:
                     # @FIXME: verificação de tipo???
@@ -91,10 +93,15 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                     _type = cur_stack[0]
                     _id = cur_stack[1]
                     value: Any
+
+                    print(f'{_type=}')
+                    print(f'{_id=}')
+
                     if cur_symbol.type == 'attrib':
                         value = symbol_stack.pop().name
                     else:
                         value = default_value[_type.value]
+
                     cur_symbol = Symbol(
                         name=_id.value,
                         type=_type.value,
@@ -102,7 +109,6 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                     )
                     symbol_table.insert(cur_symbol)
                     code_buffer.append(f'{cur_symbol.name} = {cur_symbol.value}')
-                    cur_stack = []
                 case {"head": "DECL_END", "body": ["^"]}:
                     # print(f'{cur_stack=}')
                     ...

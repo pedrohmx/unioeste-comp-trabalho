@@ -35,9 +35,22 @@ def tokenize(source: str, rules: list[Rule], filename: str = ''):
             continue
 
         pos = match.start() - line_start
+
+        if token_name == 'literal_int':
+            if '0x' in token_lexeme:
+                value = str(int(token_lexeme, 16))
+            elif '0o' in token_lexeme:
+                value = str(int(token_lexeme, 8))
+            elif '0b' in token_lexeme:
+                value = str(int(token_lexeme, 2))
+            else:
+                value = token_lexeme
+        else:
+            value = token_lexeme
+
         tok = Token(
             name=token_name,
-            value=token_lexeme,
+            value=value,
             file=filename,
             pos=f':{line}:{pos+1}',
             span=match.end() - match.start()
