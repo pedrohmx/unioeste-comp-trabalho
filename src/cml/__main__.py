@@ -14,7 +14,7 @@ app = Typer(no_args_is_help=True)
 
 
 @app.command(no_args_is_help=True)
-def compile(source: Path, output: str = "cml.3addr.txt"):
+def compile(source: Path, output: str = "cml.3addr.txt", verbose: bool = False):
     """Compiles from source file"""
     if not source.exists():
         print("[error:comp] Source file does not exists, exiting.")
@@ -35,7 +35,7 @@ def compile(source: Path, output: str = "cml.3addr.txt"):
     else:
         print("[info:comp] lex ok.")
 
-    parse_result, ok, err = parse_syntax(tokens=tokens)
+    parse_result, ok, err = parse_syntax(tokens=tokens, verbose=verbose)
     if parse_result:
         print("[info:comp] syntax ok.")
     else:
@@ -47,7 +47,7 @@ def compile(source: Path, output: str = "cml.3addr.txt"):
     # for t in tokens:
     #     print(t)
     # parse_semantics(tokens)
-    print("[info:comp] semantics ok.")
+    # print("[info:comp] semantics ok.")
 
 
 @app.command("lex", no_args_is_help=True)

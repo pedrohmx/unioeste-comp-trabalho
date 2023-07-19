@@ -2,7 +2,7 @@ from .util import Token, Symbol, SymbolTable
 from .lang import cml_grammar, cml_table
 
 
-def parse_syntax(tokens: list[Token], empty="^"):
+def parse_syntax(tokens: list[Token], empty="^", verbose=False):
     stack: list[str] = ["0"]
     tk_input: list[Token] = [t for t in tokens if t.name != "unknown"]
     tk_input.append(Token(name="$", value="$", file="", pos="", span=-1))
@@ -14,16 +14,11 @@ def parse_syntax(tokens: list[Token], empty="^"):
     result = True
 
     symbol_table = SymbolTable()
+    cur_stack: list[Token] = []
 
     while True:
         cur_input = tk_input[0]
         cur_state = stack[-1]
-
-        # print(f"> stack: {stack}")
-        # print(f"> input: {input}")
-        # print(f"> actions: {actions}")
-        # print(f"> cur input: {cur_input}")
-        # print(f"> cur state: {cur_state}")
 
         action = cml_table[cur_state][cur_input.name]
         actions.append(action)
@@ -38,7 +33,10 @@ def parse_syntax(tokens: list[Token], empty="^"):
             break
 
         if action[0] == "s":  # stack
+            if verbose:
+                print(f'stacked {cur_input}')
             tk_read.append(tk_input.pop(0))
+            cur_stack.append(tk_read[-1])
 
             stack.append(cur_input.name)
             stack.append(action[1:])
@@ -67,7 +65,9 @@ def parse_syntax(tokens: list[Token], empty="^"):
             stack.append(next_state)
 
             # parse semantics
-            # print(r_rule)
+            if verbose:
+                print(r_rule)
+
             match r_rule:
                 case {"head": "STMTS'", "body": ["STMTS"]}:
                     symbol_table.openScope()
@@ -77,8 +77,14 @@ def parse_syntax(tokens: list[Token], empty="^"):
                 case {"head": "STMT", "body": ["FLOW"]}: ...
                 case {"head": "STMT", "body": ["DECL_STMT", ";"]}: ...
                 case {"head": "STMT", "body": ["COMMAND", ";"]}: ...
-                case {"head": "DECL_STMT", "body": ["type", "id", "DECL_END"]}: ...
-                case {"head": "DECL_END", "body": ["^"]}: ...
+                case {"head": "DECL_STMT", "body": ["type", "id", "DECL_END"]}:
+                    # add variable to symbol table
+                    ...
+                case {"head": "DECL_END", "body": ["^"]}:
+                    _type = cur_stack[0]
+                    _id = cur_stack[1]
+                    ...
+                    cur_stack = []
                 case {"head": "DECL_END", "body": ["attrib", "EXPR"]}: ...
                 case {"head": "ATTRIB_STMT", "body": ["id", "ATTRIB_END"]}: ...
                 case {"head": "ATTRIB_END", "body": ["attrib", "EXPR"]}: ...
@@ -158,7 +164,7 @@ def parse_semantics(in_tokens: list[Token]):
             )
             return None
 
-    code_buffer: list[str] = []
+    # code_buffer: list[str] = []
 
     # Regras semanticas
 
@@ -175,25 +181,26 @@ def parse_semantics(in_tokens: list[Token]):
     # analisa um único comando ou declaração
     def stmt():
         token = peek()
-        if token and token.name == "id":
-            if temp := consume(token.name):
-                var_name = temp.value
-            else:
-                raise ValueError(f"Found {temp} while searching for {token}")
+        if token:
+            if token.name == "id":
+                if temp := consume(token.name):
+                    var_name = temp.value
+                else:
+                    raise ValueError(f"Found {temp} while searching for {token}")
 
-            # Verifica se a variável já foi declarada
-            if symbol_table.lookup(var_name) is None:
-                # Insere a variável na tabela de símbolos com escopo global (0)
-                symbol_table.insert(
-                    Symbol(name=var_name, type="unknown", value=None, scope=0)
-                )
-            else:
-                print(f'[error:sem] Variável "{var_name}" já foi declarada.')
-                # raise ValueError(f'[error:sem] Variável "{var_name}" já foi declarada.')
+                # Verifica se a variável já foi declarada
+                if symbol_table.lookup(var_name) is None:
+                    # Insere a variável na tabela de símbolos com escopo global (0)
+                    symbol_table.insert(
+                        Symbol(name=var_name, type="unknown", value=None, scope=0)
+                    )
+                else:
+                    print(f'[error:sem] Variável "{var_name}" já foi declarada.')
+                    # raise ValueError(f'[error:sem] Variável "{var_name}" já foi declarada.')
 
-            consume("attrib")
-            expr()
-            consume(";")
+                consume("attrib")
+                expr()
+                consume(";")
         else:
             consume("UNKNOWN")
 

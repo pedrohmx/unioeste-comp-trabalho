@@ -68,6 +68,7 @@ class SymbolTable:
     def insert(self, symbol: Symbol):
         cur_scope = self.scopes[::-1][0]
         if symbol.name not in cur_scope:
+            symbol.scope = self.scope_count - 1
             cur_scope[symbol.name] = symbol
         else:
             print("Symbol already in scope")

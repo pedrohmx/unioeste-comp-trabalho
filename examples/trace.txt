@@ -1,0 +1,158 @@
+╭─xavier@fedora (venv) ~/Workspaces/unioeste/unioeste-comp/trabalho/unioeste-comp-trabalho/examples ‹main●› 
+╰─$ python -m cml compile a.cml >>trace.txt 2>&1
+source:
+    a = b;
+╭─────────────────────────────── Traceback (most recent call last) ────────────────────────────────╮
+│ /home/xavier/Workspaces/unioeste/unioeste-comp/trabalho/unioeste-comp-trabalho/src/cml/__main__. │
+│ py:49 in compile                                                                                 │
+│                                                                                                  │
+│    46 │                                                                                          │
+│    47 │   # for t in tokens:                                                                     │
+│    48 │   #     print(t)                                                                         │
+│ ❱  49 │   parse_semantics(tokens)                                                                │
+│    50 │   print("[info:comp] semantics ok.")                                                     │
+│    51                                                                                            │
+│    52                                                                                            │
+│                                                                                                  │
+│ ╭───────────────────────────────── locals ──────────────────────────────────╮                    │
+│ │          err = []                                                         │                    │
+│ │            f = <_io.TextIOWrapper name='a.cml' mode='r' encoding='UTF-8'> │                    │
+│ │    lex_error = False                                                      │                    │
+│ │           ok = [                                                          │                    │
+│ │                │   <a.cml:1:1 | id | a>,                                  │                    │
+│ │                │   <a.cml:1:3 | attrib | =>,                              │                    │
+│ │                │   <a.cml:1:5 | id | b>,                                  │                    │
+│ │                │   <a.cml:1:6 | ; | ;>                                    │                    │
+│ │                ]                                                          │                    │
+│ │       output = 'cml.3addr.txt'                                            │                    │
+│ │ parse_result = True                                                       │                    │
+│ │       source = PosixPath('a.cml')                                         │                    │
+│ │        token = <a.cml:1:6 | ; | ;>                                        │                    │
+│ │       tokens = [                                                          │                    │
+│ │                │   <a.cml:1:1 | id | a>,                                  │                    │
+│ │                │   <a.cml:1:3 | attrib | =>,                              │                    │
+│ │                │   <a.cml:1:5 | id | b>,                                  │                    │
+│ │                │   <a.cml:1:6 | ; | ;>                                    │                    │
+│ │                ]                                                          │                    │
+│ ╰───────────────────────────────────────────────────────────────────────────╯                    │
+│                                                                                                  │
+│ /home/xavier/Workspaces/unioeste/unioeste-comp/trabalho/unioeste-comp-trabalho/src/cml/parser.py │
+│ :168 in parse_semantics                                                                          │
+│                                                                                                  │
+│   165 │   │   │   │   │   f"[error:sem] Tentativa de atribuição entre variáveis de tipos difer   │
+│   166 │   │   │   │   )                                                                          │
+│   167 │                                                                                          │
+│ ❱ 168 │   program()  # Inicia o processo de análise    # Grammar rules for CML                   │
+│   169                                                                                            │
+│                                                                                                  │
+│ ╭─────────────────────────────────── locals ───────────────────────────────────╮                 │
+│ │  code_buffer = []                                                            │                 │
+│ │      consume = <function parse_semantics.<locals>.consume at 0x7f0fc44c1760> │                 │
+│ │         expr = <function parse_semantics.<locals>.expr at 0x7f0fc44c1940>    │                 │
+│ │    in_tokens = [                                                             │                 │
+│ │                │   <a.cml:1:1 | id | a>,                                     │                 │
+│ │                │   <a.cml:1:3 | attrib | =>,                                 │                 │
+│ │                │   <a.cml:1:5 | id | b>,                                     │                 │
+│ │                │   <a.cml:1:6 | ; | ;>                                       │                 │
+│ │                ]                                                             │                 │
+│ │         peek = <function parse_semantics.<locals>.peek at 0x7f0fc44c16c0>    │                 │
+│ │      program = <function parse_semantics.<locals>.program at 0x7f0fc44c1620> │                 │
+│ │         stmt = <function parse_semantics.<locals>.stmt at 0x7f0fc44c18a0>    │                 │
+│ │        stmts = <function parse_semantics.<locals>.stmts at 0x7f0fc44c1800>   │                 │
+│ │ symbol_table = <cml.util.SymbolTable object at 0x7f0fc44c6650>               │                 │
+│ │       tokens = [<a.cml:1:6 | ; | ;>]                                         │                 │
+│ ╰──────────────────────────────────────────────────────────────────────────────╯                 │
+│                                                                                                  │
+│ /home/xavier/Workspaces/unioeste/unioeste-comp/trabalho/unioeste-comp-trabalho/src/cml/parser.py │
+│ :119 in program                                                                                  │
+│                                                                                                  │
+│   116 │   # Regras semanticas                                                                    │
+│   117 │                                                                                          │
+│   118 │   def program():                                                                         │
+│ ❱ 119 │   │   stmts()                                                                            │
+│   120 │   │   # Destrói a tabela de símbolos quando a análise estiver completa                   │
+│   121 │   │   symbol_table.destroy()                                                             │
+│   122                                                                                            │
+│                                                                                                  │
+│ ╭────────────────────────────────── locals ──────────────────────────────────╮                   │
+│ │        stmts = <function parse_semantics.<locals>.stmts at 0x7f0fc44c1800> │                   │
+│ │ symbol_table = <cml.util.SymbolTable object at 0x7f0fc44c6650>             │                   │
+│ ╰────────────────────────────────────────────────────────────────────────────╯                   │
+│                                                                                                  │
+│ /home/xavier/Workspaces/unioeste/unioeste-comp/trabalho/unioeste-comp-trabalho/src/cml/parser.py │
+│ :126 in stmts                                                                                    │
+│                                                                                                  │
+│   123 │   def stmts():                                                                           │
+│   124 │   │   next_token = peek()                                                                │
+│   125 │   │   while next_token and next_token.name != "$":                                       │
+│ ❱ 126 │   │   │   stmt()                                                                         │
+│   127 │                                                                                          │
+│   128 │   # analisa um único comando ou declaração                                               │
+│   129 │   def stmt():                                                                            │
+│                                                                                                  │
+│ ╭──────────────────────────────── locals ─────────────────────────────────╮                      │
+│ │ next_token = <a.cml:1:1 | id | a>                                       │                      │
+│ │       peek = <function parse_semantics.<locals>.peek at 0x7f0fc44c16c0> │                      │
+│ │       stmt = <function parse_semantics.<locals>.stmt at 0x7f0fc44c18a0> │                      │
+│ ╰─────────────────────────────────────────────────────────────────────────╯                      │
+│                                                                                                  │
+│ /home/xavier/Workspaces/unioeste/unioeste-comp/trabalho/unioeste-comp-trabalho/src/cml/parser.py │
+│ :148 in stmt                                                                                     │
+│                                                                                                  │
+│   145 │   │   │   │   # raise ValueError(f'[error:sem] Variável "{var_name}" já foi declarada.   │
+│   146 │   │   │                                                                                  │
+│   147 │   │   │   consume("attrib")                                                              │
+│ ❱ 148 │   │   │   expr()                                                                         │
+│   149 │   │   │   consume(";")                                                                   │
+│   150 │   │   else:                                                                              │
+│   151 │   │   │   consume("UNKNOWN")                                                             │
+│                                                                                                  │
+│ ╭─────────────────────────────────── locals ───────────────────────────────────╮                 │
+│ │      consume = <function parse_semantics.<locals>.consume at 0x7f0fc44c1760> │                 │
+│ │         expr = <function parse_semantics.<locals>.expr at 0x7f0fc44c1940>    │                 │
+│ │         peek = <function parse_semantics.<locals>.peek at 0x7f0fc44c16c0>    │                 │
+│ │ symbol_table = <cml.util.SymbolTable object at 0x7f0fc44c6650>               │                 │
+│ │         temp = <a.cml:1:1 | id | a>                                          │                 │
+│ │        token = <a.cml:1:1 | id | a>                                          │                 │
+│ │     var_name = 'a'                                                           │                 │
+│ ╰──────────────────────────────────────────────────────────────────────────────╯                 │
+│                                                                                                  │
+│ /home/xavier/Workspaces/unioeste/unioeste-comp/trabalho/unioeste-comp-trabalho/src/cml/parser.py │
+│ :156 in expr                                                                                     │
+│                                                                                                  │
+│   153 │   def expr():                                                                            │
+│   154 │   │   # Verifica se as variáveis nos dois lados do operador '=' têm o mesmo tipo         │
+│   155 │   │   left_var = consume("id")                                                           │
+│ ❱ 156 │   │   consume("attrib")                                                                  │
+│   157 │   │   right_var = consume("id")                                                          │
+│   158 │   │                                                                                      │
+│   159 │   │   if left_var and right_var:                                                         │
+│                                                                                                  │
+│ ╭─────────────────────────────────── locals ───────────────────────────────────╮                 │
+│ │      consume = <function parse_semantics.<locals>.consume at 0x7f0fc44c1760> │                 │
+│ │     left_var = <a.cml:1:5 | id | b>                                          │                 │
+│ │ symbol_table = <cml.util.SymbolTable object at 0x7f0fc44c6650>               │                 │
+│ ╰──────────────────────────────────────────────────────────────────────────────╯                 │
+│                                                                                                  │
+│ /home/xavier/Workspaces/unioeste/unioeste-comp/trabalho/unioeste-comp-trabalho/src/cml/parser.py │
+│ :109 in consume                                                                                  │
+│                                                                                                  │
+│   106 │   │   │   print(                                                                         │
+│   107 │   │   │   │   f'[error:sem] Esperado "{expected_token_type}", encontrado "{token.name    │
+│   108 │   │   │   )                                                                              │
+│ ❱ 109 │   │   │   raise ValueError(                                                              │
+│   110 │   │   │   │   f'[error:sem] Esperado "{expected_token_type}", encontrado "{token.name    │
+│   111 │   │   │   )                                                                              │
+│   112 │   │   │   return None                                                                    │
+│                                                                                                  │
+│ ╭───────────────────────────────────── locals ─────────────────────────────────────╮             │
+│ │ expected_token_type = 'attrib'                                                   │             │
+│ │                peek = <function parse_semantics.<locals>.peek at 0x7f0fc44c16c0> │             │
+│ │               token = <a.cml:1:6 | ; | ;>                                        │             │
+│ │              tokens = [<a.cml:1:6 | ; | ;>]                                      │             │
+│ ╰──────────────────────────────────────────────────────────────────────────────────╯             │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+ValueError: [error:sem] Esperado "attrib", encontrado ";"
+[info:comp] lex ok.
+[info:comp] syntax ok.
+[error:sem] Esperado "attrib", encontrado ";"
