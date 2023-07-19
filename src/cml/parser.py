@@ -164,6 +164,8 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False, compile=False):
                         )
                         symbol_stack.append(tsymbol)
                         temp_counter += 1
+                    else:
+                        symbol_stack.append(cur_symbol)
                     ...
                 case {"head": "ARITH_EXPR_C", "body": ["arith_op_sum", "TERM"]}:
                     last_token = cur_stack[-2]
@@ -202,6 +204,11 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False, compile=False):
                     ...
                 case {"head": "VALUE", "body": ["id"]}:
                     # must get symbol from table
+                    var_name = cur_stack[-1].value
+                    if tnsymbol := symbol_table.lookup(var_name):
+                        symbol_stack.append(tnsymbol)
+                    else:
+                        print(f"[parse:error]: variable {var_name} wasn't declared in this scope.")
                     ...
                 case {"head": "LITERAL", "body": ["literal_int"]}:
                     last_token = cur_stack[-1]
