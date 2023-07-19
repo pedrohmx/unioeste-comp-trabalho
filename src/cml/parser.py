@@ -1,6 +1,8 @@
 from .util import Token, Symbol, SymbolTable, default_value
 from .lang import cml_grammar, cml_table
+
 from typing import Any
+from pprint import pprint
 
 
 def parse_syntax(tokens: list[Token], empty="^", verbose=False, compile=False):
@@ -142,8 +144,33 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False, compile=False):
                 case {"head": "REL_EXPR_C", "body": ["rel_op", "ARITH_EXPR"]}: ...
                 case {"head": "ARITH_EXPR", "body": ["TERM", "ARITH_EXPR_C"]}:
                     # Symbol already on the stack, idk if something needs to be done here
+                    # print('[debug:parse]')
+                    # pprint(symbol_stack)
+                    # pprint(cur_stack)
+                    cur_symbol = symbol_stack.pop()
+                    if cur_symbol.name == 'arith_op_sum':
+                        rsymbol = symbol_stack.pop()
+                        lsymbol = symbol_stack.pop()
+
+                        code_buffer.append(f'{lsymbol.name} = {lsymbol.value}')
+                        code_buffer.append(f'{rsymbol.name} = {rsymbol.value}')
+
+                        tsymbol = Symbol(
+                            f'__T_{temp_counter}',
+                            # FIXME: TYPE SAFETY GOES HERE
+                            type=rsymbol.type if rsymbol.type == lsymbol.type else 'god_knows',
+                            value=f'{lsymbol.name} {cur_symbol.value} {rsymbol.name}'
+                            # value=rvalue + lvalue if cur_symbol.value == '+' else rvalue - lvalue
+                        )
+                        symbol_stack.append(tsymbol)
+                        temp_counter += 1
                     ...
-                case {"head": "ARITH_EXPR_C", "body": ["arith_op_sum", "TERM"]}: ...
+                case {"head": "ARITH_EXPR_C", "body": ["arith_op_sum", "TERM"]}:
+                    last_token = cur_stack[-2]
+                    symbol_stack.append(Symbol(
+                        'arith_op_sum', 'arith_op_sum', last_token.value
+                    ))
+                    ...
                 case {"head": "ARITH_EXPR_C", "body": ["^"]}:
                     # Symbol already on the stack, idk if something needs to be done here
                     ...
@@ -184,6 +211,8 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False, compile=False):
                         value=last_token.value
                     ))
                     temp_counter += 1
+                    # print('[debug:parse]')
+                    # pprint(symbol_stack)
                 case {"head": "LITERAL", "body": ["literal_float"]}:
                     last_token = cur_stack[-1]
                     symbol_stack.append(Symbol(
