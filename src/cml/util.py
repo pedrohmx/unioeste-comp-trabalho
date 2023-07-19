@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TypedDict, TypeAlias, Any
 
 
@@ -27,10 +27,10 @@ class Token:
 
 
 @dataclass
-class Node():
+class Node:
     node_type: str
     value: Any
-    children: list['Node'] = list()
+    children: list["Node"] = field(default_factory=list)
 
     def __repr__(self) -> str:
         if self.children:
