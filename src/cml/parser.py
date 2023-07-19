@@ -186,9 +186,30 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                         value=last_token.value
                     ))
                     temp_counter += 1
-                case {"head": "LITERAL", "body": ["literal_float"]}: ...
-                case {"head": "LITERAL", "body": ["literal_bool"]}: ...
-                case {"head": "LITERAL", "body": ["literal_str"]}: ...
+                case {"head": "LITERAL", "body": ["literal_float"]}:
+                    last_token = cur_stack[-1]
+                    symbol_stack.append(Symbol(
+                        name=f'__T_{temp_counter}',
+                        type='f32',
+                        value=last_token.value
+                    ))
+                    temp_counter += 1
+                case {"head": "LITERAL", "body": ["literal_bool"]}:
+                    last_token = cur_stack[-1]
+                    symbol_stack.append(Symbol(
+                        name=f'__T_{temp_counter}',
+                        type='bool',
+                        value=1 if last_token.value == 'true' else 0
+                    ))
+                    temp_counter += 1
+                case {"head": "LITERAL", "body": ["literal_str"]}:
+                    last_token = cur_stack[-1]
+                    symbol_stack.append(Symbol(
+                        name=f'__T_{temp_counter}',
+                        type='str',
+                        value=last_token.value
+                    ))
+                    temp_counter += 1
 
         else:
             raise ValueError("Invalid action")
