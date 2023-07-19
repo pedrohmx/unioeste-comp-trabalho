@@ -7,7 +7,7 @@ from rich.text import Text
 from rich.table import Table
 
 from .tokenizer import tokenize, Token
-from .parser import parse_syntax, parse_semantics
+from .parser import parse_syntax  # parse_semantics
 from .lang import cml_rules
 
 app = Typer(no_args_is_help=True)
@@ -35,9 +35,11 @@ def compile(source: Path, output: str = "cml.3addr.txt", verbose: bool = False):
     else:
         print("[info:comp] lex ok.")
 
-    parse_result, ok, err = parse_syntax(tokens=tokens, verbose=verbose)
+    parse_result, ok, err, code_buffer = parse_syntax(tokens=tokens, verbose=verbose)
     if parse_result:
         print("[info:comp] syntax ok.")
+        print('--- 3addr ---')
+        print(code_buffer)
     else:
         print("[error:parse] halting...")
         print("[error:parse] errors @")
@@ -96,7 +98,7 @@ def parse(source: Path):
     with open(source, "r") as f:
         tokens = tokenize(f.read(), cml_rules, source.name)
 
-    result, ok, err = parse_syntax(tokens=tokens)
+    result, ok, err, _ = parse_syntax(tokens=tokens)
     if result:
         print("Syntax ok")
     else:

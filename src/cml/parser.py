@@ -18,6 +18,8 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
     cur_stack: list[Token] = []
     code_buffer: list[str] = []
 
+    temp_counter: int = 0
+
     while True:
         cur_input = tk_input[0]
         cur_state = stack[-1]
@@ -83,7 +85,7 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                     # add variable to symbol table
                     cur_symbol = symbol_stack.pop()
                     symbol_table.insert(cur_symbol)
-                    code_buffer.append(f'{cur_symbol.name} = {cur_symbol.value} ;')
+                    code_buffer.append(f'{cur_symbol.name} = {cur_symbol.value}')
                     cur_stack = []
                 case {"head": "DECL_END", "body": ["^"]}:
                     print(f'{cur_stack=}')
@@ -128,8 +130,16 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                 case {"head": "WCHAIN", "body": ["^"]}: ...
                 case {"head": "WCHAIN", "body": [", ", "VALUE", "WCHAIN"]}: ...
                 case {"head": "VALUE", "body": ["LITERAL"]}: ...
-                case {"head": "VALUE", "body": ["id"]}: ...
-                case {"head": "LITERAL", "body": ["literal_int"]}: ...
+                case {"head": "VALUE", "body": ["id"]}:
+                    # must get symbol from table
+                    ...
+                case {"head": "LITERAL", "body": ["literal_int"]}:
+                    symbol_stack.append(Symbol(
+                        name=f'__T_{temp_counter}',
+                        type='i32',
+                        value=cur_input.value
+                    ))
+                    temp_counter += 1
                 case {"head": "LITERAL", "body": ["literal_float"]}: ...
                 case {"head": "LITERAL", "body": ["literal_bool"]}: ...
                 case {"head": "LITERAL", "body": ["literal_str"]}: ...
@@ -137,7 +147,7 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
         else:
             raise ValueError("Invalid action")
         # print("-"*64)
-    return result, tk_read, tk_errors
+    return result, tk_read, tk_errors, code_buffer
 
 
 def goto_lookup(index: int | str, symbol: str) -> str:
