@@ -39,7 +39,8 @@ def compile(source: Path, output: str = "cml.3addr.txt", verbose: bool = False):
     if parse_result:
         print("[info:comp] syntax ok.")
         print('--- 3addr ---')
-        print(code_buffer)
+        for line in code_buffer:
+            print(line)
     else:
         print("[error:parse] halting...")
         print("[error:parse] errors @")
