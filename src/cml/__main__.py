@@ -7,7 +7,7 @@ from rich.text import Text
 from rich.table import Table
 
 from .tokenizer import tokenize, Token
-from .parser import parse_syntax
+from .parser import parse_syntax, parse_semantics
 from .lang import cml_rules
 
 app = Typer(no_args_is_help=True)
@@ -43,6 +43,11 @@ def compile(source: Path, output: str = "cml.3addr.txt"):
         print("[error:parse] errors @")
         for e in err:
             print(e)
+
+    # for t in tokens:
+    #     print(t)
+    parse_semantics(tokens)
+    print("[info:comp] semantics ok.")
 
 
 @app.command("lex", no_args_is_help=True)
