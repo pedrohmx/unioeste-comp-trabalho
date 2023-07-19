@@ -1,0 +1,177 @@
+╭─xavier@phantom (venv) ~/Workspaces/unioeste/unioeste-comp-trabalho/examples ‹main●› 
+╰─$ python -m cml compile loop.cml >out.txt 2>&1
+
+╭─────────────────────────────── Traceback (most recent call last) ────────────────────────────────╮
+│ /home/xavier/Workspaces/unioeste/unioeste-comp-trabalho/src/cml/__main__.py:49 in compile        │
+│                                                                                                  │
+│    46 │                                                                                          │
+│    47 │   # for t in tokens:                                                                     │
+│    48 │   #     print(t)                                                                         │
+│ ❱  49 │   parse_semantics(tokens)                                                                │
+│    50 │   print("[info:comp] semantics ok.")                                                     │
+│    51                                                                                            │
+│    52                                                                                            │
+│                                                                                                  │
+│ ╭─────────────────────────────────── locals ───────────────────────────────────╮                 │
+│ │          err = []                                                            │                 │
+│ │            f = <_io.TextIOWrapper name='loop.cml' mode='r' encoding='UTF-8'> │                 │
+│ │    lex_error = False                                                         │                 │
+│ │           ok = [                                                             │                 │
+│ │                │   <loop.cml:3:1 | type | i32>,                              │                 │
+│ │                │   <loop.cml:3:5 | id | i>,                                  │                 │
+│ │                │   <loop.cml:3:7 | attrib | =>,                              │                 │
+│ │                │   <loop.cml:3:9 | literal_int | 0>,                         │                 │
+│ │                │   <loop.cml:3:10 | ; | ;>,                                  │                 │
+│ │                │   <loop.cml:5:1 | while | while>,                           │                 │
+│ │                │   <loop.cml:5:7 | ( | (>,                                   │                 │
+│ │                │   <loop.cml:5:9 | id | i>,                                  │                 │
+│ │                │   <loop.cml:5:11 | rel_op | <>,                             │                 │
+│ │                │   <loop.cml:5:13 | literal_int | 2>,                        │                 │
+│ │                │   ... +34                                                   │                 │
+│ │                ]                                                             │                 │
+│ │       output = 'cml.3addr.txt'                                               │                 │
+│ │ parse_result = True                                                          │                 │
+│ │       source = PosixPath('loop.cml')                                         │                 │
+│ │        token = <loop.cml:12:1 | } | }>                                       │                 │
+│ │       tokens = [                                                             │                 │
+│ │                │   <loop.cml:3:1 | type | i32>,                              │                 │
+│ │                │   <loop.cml:3:5 | id | i>,                                  │                 │
+│ │                │   <loop.cml:3:7 | attrib | =>,                              │                 │
+│ │                │   <loop.cml:3:9 | literal_int | 0>,                         │                 │
+│ │                │   <loop.cml:3:10 | ; | ;>,                                  │                 │
+│ │                │   <loop.cml:5:1 | while | while>,                           │                 │
+│ │                │   <loop.cml:5:7 | ( | (>,                                   │                 │
+│ │                │   <loop.cml:5:9 | id | i>,                                  │                 │
+│ │                │   <loop.cml:5:11 | rel_op | <>,                             │                 │
+│ │                │   <loop.cml:5:13 | literal_int | 2>,                        │                 │
+│ │                │   ... +34                                                   │                 │
+│ │                ]                                                             │                 │
+│ ╰──────────────────────────────────────────────────────────────────────────────╯                 │
+│                                                                                                  │
+│ /home/xavier/Workspaces/unioeste/unioeste-comp-trabalho/src/cml/parser.py:168 in parse_semantics │
+│                                                                                                  │
+│   165 │   │   │   │   │   f"[error:sem] Tentativa de atribuição entre variáveis de tipos difer   │
+│   166 │   │   │   │   )                                                                          │
+│   167 │                                                                                          │
+│ ❱ 168 │   program()  # Inicia o processo de análise    # Grammar rules for CML                   │
+│   169                                                                                            │
+│                                                                                                  │
+│ ╭─────────────────────────────────── locals ───────────────────────────────────╮                 │
+│ │  code_buffer = []                                                            │                 │
+│ │      consume = <function parse_semantics.<locals>.consume at 0x7f1d01010400> │                 │
+│ │         expr = <function parse_semantics.<locals>.expr at 0x7f1d010107c0>    │                 │
+│ │    in_tokens = [                                                             │                 │
+│ │                │   <loop.cml:3:1 | type | i32>,                              │                 │
+│ │                │   <loop.cml:3:5 | id | i>,                                  │                 │
+│ │                │   <loop.cml:3:7 | attrib | =>,                              │                 │
+│ │                │   <loop.cml:3:9 | literal_int | 0>,                         │                 │
+│ │                │   <loop.cml:3:10 | ; | ;>,                                  │                 │
+│ │                │   <loop.cml:5:1 | while | while>,                           │                 │
+│ │                │   <loop.cml:5:7 | ( | (>,                                   │                 │
+│ │                │   <loop.cml:5:9 | id | i>,                                  │                 │
+│ │                │   <loop.cml:5:11 | rel_op | <>,                             │                 │
+│ │                │   <loop.cml:5:13 | literal_int | 2>,                        │                 │
+│ │                │   ... +34                                                   │                 │
+│ │                ]                                                             │                 │
+│ │         peek = <function parse_semantics.<locals>.peek at 0x7f1d01010540>    │                 │
+│ │      program = <function parse_semantics.<locals>.program at 0x7f1d010105e0> │                 │
+│ │         stmt = <function parse_semantics.<locals>.stmt at 0x7f1d01010720>    │                 │
+│ │        stmts = <function parse_semantics.<locals>.stmts at 0x7f1d01010680>   │                 │
+│ │ symbol_table = <cml.util.SymbolTable object at 0x7f1d00e22c10>               │                 │
+│ │       tokens = [                                                             │                 │
+│ │                │   <loop.cml:12:1 | } | }>,                                  │                 │
+│ │                │   <loop.cml:11:31 | ; | ;>,                                 │                 │
+│ │                │   <loop.cml:11:27 | literal_str | "\n">,                    │                 │
+│ │                │   <loop.cml:11:25 | , | ,>,                                 │                 │
+│ │                │   <loop.cml:11:9 | literal_str | "Inside the for">,         │                 │
+│ │                │   <loop.cml:11:3 | write | write>,                          │                 │
+│ │                │   <loop.cml:10:32 | { | {>,                                 │                 │
+│ │                │   <loop.cml:10:30 | ) | )>,                                 │                 │
+│ │                │   <loop.cml:10:29 | literal_int | 1>,                       │                 │
+│ │                │   <loop.cml:10:26 | attrib_op | +=>,                        │                 │
+│ │                │   ... +34                                                   │                 │
+│ │                ]                                                             │                 │
+│ ╰──────────────────────────────────────────────────────────────────────────────╯                 │
+│                                                                                                  │
+│ /home/xavier/Workspaces/unioeste/unioeste-comp-trabalho/src/cml/parser.py:119 in program         │
+│                                                                                                  │
+│   116 │   # Regras semanticas                                                                    │
+│   117 │                                                                                          │
+│   118 │   def program():                                                                         │
+│ ❱ 119 │   │   stmts()                                                                            │
+│   120 │   │   # Destrói a tabela de símbolos quando a análise estiver completa                   │
+│   121 │   │   symbol_table.destroy()                                                             │
+│   122                                                                                            │
+│                                                                                                  │
+│ ╭────────────────────────────────── locals ──────────────────────────────────╮                   │
+│ │        stmts = <function parse_semantics.<locals>.stmts at 0x7f1d01010680> │                   │
+│ │ symbol_table = <cml.util.SymbolTable object at 0x7f1d00e22c10>             │                   │
+│ ╰────────────────────────────────────────────────────────────────────────────╯                   │
+│                                                                                                  │
+│ /home/xavier/Workspaces/unioeste/unioeste-comp-trabalho/src/cml/parser.py:126 in stmts           │
+│                                                                                                  │
+│   123 │   def stmts():                                                                           │
+│   124 │   │   next_token = peek()                                                                │
+│   125 │   │   while next_token and next_token.name != "$":                                       │
+│ ❱ 126 │   │   │   stmt()                                                                         │
+│   127 │                                                                                          │
+│   128 │   # analisa um único comando ou declaração                                               │
+│   129 │   def stmt():                                                                            │
+│                                                                                                  │
+│ ╭──────────────────────────────── locals ─────────────────────────────────╮                      │
+│ │ next_token = <loop.cml:3:1 | type | i32>                                │                      │
+│ │       peek = <function parse_semantics.<locals>.peek at 0x7f1d01010540> │                      │
+│ │       stmt = <function parse_semantics.<locals>.stmt at 0x7f1d01010720> │                      │
+│ ╰─────────────────────────────────────────────────────────────────────────╯                      │
+│                                                                                                  │
+│ /home/xavier/Workspaces/unioeste/unioeste-comp-trabalho/src/cml/parser.py:151 in stmt            │
+│                                                                                                  │
+│   148 │   │   │   expr()                                                                         │
+│   149 │   │   │   consume(";")                                                                   │
+│   150 │   │   else:                                                                              │
+│ ❱ 151 │   │   │   consume("UNKNOWN")                                                             │
+│   152 │                                                                                          │
+│   153 │   def expr():                                                                            │
+│   154 │   │   # Verifica se as variáveis nos dois lados do operador '=' têm o mesmo tipo         │
+│                                                                                                  │
+│ ╭─────────────────────────────────── locals ───────────────────────────────────╮                 │
+│ │      consume = <function parse_semantics.<locals>.consume at 0x7f1d01010400> │                 │
+│ │         expr = <function parse_semantics.<locals>.expr at 0x7f1d010107c0>    │                 │
+│ │         peek = <function parse_semantics.<locals>.peek at 0x7f1d01010540>    │                 │
+│ │ symbol_table = <cml.util.SymbolTable object at 0x7f1d00e22c10>               │                 │
+│ │        token = <loop.cml:3:1 | type | i32>                                   │                 │
+│ ╰──────────────────────────────────────────────────────────────────────────────╯                 │
+│                                                                                                  │
+│ /home/xavier/Workspaces/unioeste/unioeste-comp-trabalho/src/cml/parser.py:109 in consume         │
+│                                                                                                  │
+│   106 │   │   │   print(                                                                         │
+│   107 │   │   │   │   f'[error:sem] Esperado "{expected_token_type}", encontrado "{token.name    │
+│   108 │   │   │   )                                                                              │
+│ ❱ 109 │   │   │   raise ValueError(                                                              │
+│   110 │   │   │   │   f'[error:sem] Esperado "{expected_token_type}", encontrado "{token.name    │
+│   111 │   │   │   )                                                                              │
+│   112 │   │   │   return None                                                                    │
+│                                                                                                  │
+│ ╭───────────────────────────────────── locals ─────────────────────────────────────╮             │
+│ │ expected_token_type = 'UNKNOWN'                                                  │             │
+│ │                peek = <function parse_semantics.<locals>.peek at 0x7f1d01010540> │             │
+│ │               token = <loop.cml:3:1 | type | i32>                                │             │
+│ │              tokens = [                                                          │             │
+│ │                       │   <loop.cml:12:1 | } | }>,                               │             │
+│ │                       │   <loop.cml:11:31 | ; | ;>,                              │             │
+│ │                       │   <loop.cml:11:27 | literal_str | "\n">,                 │             │
+│ │                       │   <loop.cml:11:25 | , | ,>,                              │             │
+│ │                       │   <loop.cml:11:9 | literal_str | "Inside the for">,      │             │
+│ │                       │   <loop.cml:11:3 | write | write>,                       │             │
+│ │                       │   <loop.cml:10:32 | { | {>,                              │             │
+│ │                       │   <loop.cml:10:30 | ) | )>,                              │             │
+│ │                       │   <loop.cml:10:29 | literal_int | 1>,                    │             │
+│ │                       │   <loop.cml:10:26 | attrib_op | +=>,                     │             │
+│ │                       │   ... +34                                                │             │
+│ │                       ]                                                          │             │
+│ ╰──────────────────────────────────────────────────────────────────────────────────╯             │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+ValueError: [error:sem] Esperado "UNKNOWN", encontrado "type"
+[info:comp] lex ok.
+[info:comp] syntax ok.
+[error:sem] Esperado "UNKNOWN", encontrado "type"
