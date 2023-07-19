@@ -85,7 +85,7 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                 case {"head": "STMT", "body": ["DECL_STMT", ";"]}: ...
                 case {"head": "STMT", "body": ["COMMAND", ";"]}: ...
                 case {"head": "DECL_STMT", "body": ["type", "id", "DECL_END"]}:
-                    # add variable to symbol table
+                    # @FIXME: verificação de tipo???
                     # print(f'[debug] {symbol_stack=}')
                     cur_symbol = symbol_stack.pop()
                     _type = cur_stack[0]
