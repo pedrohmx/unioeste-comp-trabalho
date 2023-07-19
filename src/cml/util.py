@@ -47,10 +47,10 @@ class Symbol:
     name: str
     type: str
     value: Any
-    scope: int
+    scope: int = 0
 
     def __repr__(self) -> str:
-        return f"[{self.name}] type={self.type} scope={self.scope}"
+        return f"[{self.name}] type={self.type} scope={self.scope} value={self.value}"
 
 
 Scope: TypeAlias = dict[str, Symbol]
@@ -95,3 +95,7 @@ class SymbolTable:
 
 
 # S-Attr
+
+default_value: dict[str, int] = {
+    'i32': 0,
+}

@@ -1,4 +1,4 @@
-from .util import Token, Symbol, SymbolTable
+from .util import Token, Symbol, SymbolTable, default_value
 from .lang import cml_grammar, cml_table
 
 
@@ -14,6 +14,7 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
     result = True
 
     symbol_table = SymbolTable()
+    symbol_stack: list[Symbol] = []
     cur_stack: list[Token] = []
 
     while True:
@@ -69,9 +70,9 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                 print(r_rule)
 
             match r_rule:
-                case {"head": "STMTS'", "body": ["STMTS"]}:
+                case {"head": "STMTS'", "body": ["STMTS"]}: ...
+                case {"head": "STMTS", "body": ["^"]}:
                     symbol_table.openScope()
-                case {"head": "STMTS", "body": ["^"]}: ...
                 case {"head": "STMTS", "body": ["STMTS", "STMT"]}: ...
                 case {"head": "STMT", "body": ["ATTRIB_STMT", ";"]}: ...
                 case {"head": "STMT", "body": ["FLOW"]}: ...
@@ -79,12 +80,18 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                 case {"head": "STMT", "body": ["COMMAND", ";"]}: ...
                 case {"head": "DECL_STMT", "body": ["type", "id", "DECL_END"]}:
                     # add variable to symbol table
-                    ...
+                    symbol_table.insert(symbol_stack.pop())
+                    cur_stack = []
                 case {"head": "DECL_END", "body": ["^"]}:
+                    print(f'{cur_stack=}')
                     _type = cur_stack[0]
                     _id = cur_stack[1]
-                    ...
-                    cur_stack = []
+                    symbol_stack.append(Symbol(
+                        name=_id.value,
+                        type=_type.value,
+                        value=default_value[_type.value],
+                    ))
+                    print(f'{symbol_stack=}')
                 case {"head": "DECL_END", "body": ["attrib", "EXPR"]}: ...
                 case {"head": "ATTRIB_STMT", "body": ["id", "ATTRIB_END"]}: ...
                 case {"head": "ATTRIB_END", "body": ["attrib", "EXPR"]}: ...
