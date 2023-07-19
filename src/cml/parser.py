@@ -94,9 +94,6 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                     _id = cur_stack[1]
                     value: Any
 
-                    print(f'{_type=}')
-                    print(f'{_id=}')
-
                     if cur_symbol.type == 'attrib':
                         value = symbol_stack.pop().name
                     else:

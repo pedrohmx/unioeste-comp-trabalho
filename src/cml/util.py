@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import TypedDict, TypeAlias, Any
+from pprint import pprint
 
 
 class GrammarRule(TypedDict):
@@ -72,8 +73,8 @@ class SymbolTable:
             cur_scope[symbol.name] = symbol
         else:
             print("Symbol already in scope")
-            print(f"{symbol=}")
-            print(f"{cur_scope=}")
+            pprint(f"{symbol=}")
+            pprint(f"{cur_scope=}")
 
     def lookup(self, name: str) -> Symbol | None:
         for scope in self.scopes[::-1]:
