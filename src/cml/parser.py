@@ -16,6 +16,7 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
     symbol_table = SymbolTable()
     symbol_stack: list[Symbol] = []
     cur_stack: list[Token] = []
+    code_buffer: list[str] = []
 
     while True:
         cur_input = tk_input[0]
@@ -80,7 +81,9 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                 case {"head": "STMT", "body": ["COMMAND", ";"]}: ...
                 case {"head": "DECL_STMT", "body": ["type", "id", "DECL_END"]}:
                     # add variable to symbol table
-                    symbol_table.insert(symbol_stack.pop())
+                    cur_symbol = symbol_stack.pop()
+                    symbol_table.insert(cur_symbol)
+                    code_buffer.append(f'{cur_symbol.name} = {cur_symbol.value} ;')
                     cur_stack = []
                 case {"head": "DECL_END", "body": ["^"]}:
                     print(f'{cur_stack=}')
