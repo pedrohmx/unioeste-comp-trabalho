@@ -3,7 +3,7 @@ from .lang import cml_grammar, cml_table
 from typing import Any
 
 
-def parse_syntax(tokens: list[Token], empty="^", verbose=False):
+def parse_syntax(tokens: list[Token], empty="^", verbose=False, compile=False):
     stack: list[str] = ["0"]
     tk_input: list[Token] = [t for t in tokens if t.name != "unknown"]
     tk_input.append(Token(name="$", value="$", file="", pos="", span=-1))
@@ -74,7 +74,8 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
             # parse semantics
             if verbose:
                 print(r_rule)
-
+            if not compile:
+                continue
             match r_rule:
                 case {"head": "STMTS'", "body": ["STMTS"]}: ...
                 case {"head": "STMTS", "body": ["^"]}:

@@ -35,7 +35,7 @@ def compile(source: Path, output: str = "cml.3addr.txt", verbose: bool = False):
     else:
         print("[info:comp] lex ok.")
 
-    parse_result, ok, err, code_buffer = parse_syntax(tokens=tokens, verbose=verbose)
+    parse_result, ok, err, code_buffer = parse_syntax(tokens=tokens, verbose=verbose, compile=True)
     if parse_result:
         print("[info:comp] syntax ok.")
         print('--- 3addr ---')
@@ -90,7 +90,7 @@ def lex(source: Path, color: bool = False):
 
 
 @app.command("parse", no_args_is_help=True)
-def parse(source: Path):
+def parse(source: Path, verbose: bool = False):
     """parse syntax"""
     if not source.exists():
         print("Source file does not exists, exiting.")
@@ -99,7 +99,7 @@ def parse(source: Path):
     with open(source, "r") as f:
         tokens = tokenize(f.read(), cml_rules, source.name)
 
-    result, ok, err, _ = parse_syntax(tokens=tokens)
+    result, ok, err, _ = parse_syntax(tokens=tokens, verbose=verbose)
     if result:
         print("Syntax ok")
     else:
