@@ -1,5 +1,6 @@
 from .util import Token, Symbol, SymbolTable, default_value
 from .lang import cml_grammar, cml_table
+from typing import Any
 
 
 def parse_syntax(tokens: list[Token], empty="^", verbose=False):
@@ -13,9 +14,11 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
 
     result = True
 
+    # Semantic analisys
     symbol_table = SymbolTable()
     symbol_stack: list[Symbol] = []
     cur_stack: list[Token] = []
+    # Code generation
     code_buffer: list[str] = []
 
     temp_counter: int = 0
@@ -33,10 +36,10 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
             tk_errors.append(tk_input.pop(0))
             continue
 
-        if action == "acc":
+        elif action == "acc":
             break
 
-        if action[0] == "s":  # stack
+        elif action[0] == "s":  # stack
             if verbose:
                 print(f'stacked {cur_input}')
             tk_read.append(tk_input.pop(0))
@@ -83,40 +86,74 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                 case {"head": "STMT", "body": ["COMMAND", ";"]}: ...
                 case {"head": "DECL_STMT", "body": ["type", "id", "DECL_END"]}:
                     # add variable to symbol table
+                    # print(f'[debug] {symbol_stack=}')
                     cur_symbol = symbol_stack.pop()
+                    _type = cur_stack[0]
+                    _id = cur_stack[1]
+                    value: Any
+                    if cur_symbol.type == 'attrib':
+                        value = symbol_stack.pop().name
+                    else:
+                        value = default_value[_type.value]
+                    cur_symbol = Symbol(
+                        name=_id.value,
+                        type=_type.value,
+                        value=value,
+                    )
                     symbol_table.insert(cur_symbol)
                     code_buffer.append(f'{cur_symbol.name} = {cur_symbol.value}')
                     cur_stack = []
                 case {"head": "DECL_END", "body": ["^"]}:
-                    print(f'{cur_stack=}')
-                    _type = cur_stack[0]
-                    _id = cur_stack[1]
-                    symbol_stack.append(Symbol(
-                        name=_id.value,
-                        type=_type.value,
-                        value=default_value[_type.value],
-                    ))
-                    print(f'{symbol_stack=}')
-                case {"head": "DECL_END", "body": ["attrib", "EXPR"]}: ...
+                    # print(f'{cur_stack=}')
+                    ...
+                case {"head": "DECL_END", "body": ["attrib", "EXPR"]}:
+                    # Add "attrib" symbol into the stack
+                    symbol_stack.append(Symbol('=', 'attrib', None))
+                    ...
                 case {"head": "ATTRIB_STMT", "body": ["id", "ATTRIB_END"]}: ...
                 case {"head": "ATTRIB_END", "body": ["attrib", "EXPR"]}: ...
                 case {"head": "ATTRIB_END", "body": ["attrib_op", "EXPR"]}: ...
-                case {"head": "EXPR", "body": ["BOOL_EXPR"]}: ...
+                case {"head": "EXPR", "body": ["BOOL_EXPR"]}:
+                    # Symbol already on the stack, idk if something needs to be done here
+                    # add symbol code?
+                    # cur_symbol = symbol_stack.pop()
+                    cur_symbol = symbol_stack[-1]
+                    code_buffer.append(f'{cur_symbol.name} = {cur_symbol.value}')
+                    # symbol_stack.append(cur_symbol)
+                    ...
                 case {"head": "BOOL_EXPR", "body": ["not", "EXPR"]}: ...
-                case {"head": "BOOL_EXPR", "body": ["REL_EXPR", "BOOL_EXPR_C"]}: ...
-                case {"head": "BOOL_EXPR_C", "body": ["^"]}: ...
+                case {"head": "BOOL_EXPR", "body": ["REL_EXPR", "BOOL_EXPR_C"]}:
+                    # Symbol already on the stack, idk if something needs to be done here
+                    ...
+                case {"head": "BOOL_EXPR_C", "body": ["^"]}:
+                    # Symbol already on the stack, idk if something needs to be done here
+                    ...
                 case {"head": "BOOL_EXPR_C", "body": ["bool_op", "REL_EXPR"]}: ...
-                case {"head": "REL_EXPR", "body": ["ARITH_EXPR", "REL_EXPR_C"]}: ...
-                case {"head": "REL_EXPR_C", "body": ["^"]}: ...
+                case {"head": "REL_EXPR", "body": ["ARITH_EXPR", "REL_EXPR_C"]}:
+                    # Symbol already on the stack, idk if something needs to be done here
+                    ...
+                case {"head": "REL_EXPR_C", "body": ["^"]}:
+                    # Symbol already on the stack, idk if something needs to be done here
+                    ...
                 case {"head": "REL_EXPR_C", "body": ["rel_op", "ARITH_EXPR"]}: ...
-                case {"head": "ARITH_EXPR", "body": ["TERM", "ARITH_EXPR_C"]}: ...
+                case {"head": "ARITH_EXPR", "body": ["TERM", "ARITH_EXPR_C"]}:
+                    # Symbol already on the stack, idk if something needs to be done here
+                    ...
                 case {"head": "ARITH_EXPR_C", "body": ["arith_op_sum", "TERM"]}: ...
-                case {"head": "ARITH_EXPR_C", "body": ["^"]}: ...
-                case {"head": "TERM", "body": ["FACTOR", "TERM_C"]}: ...
+                case {"head": "ARITH_EXPR_C", "body": ["^"]}:
+                    # Symbol already on the stack, idk if something needs to be done here
+                    ...
+                case {"head": "TERM", "body": ["FACTOR", "TERM_C"]}:
+                    # Symbol already on the stack, idk if something needs to be done here
+                    ...
                 case {"head": "TERM_C", "body": ["arith_op_mul", "FACTOR"]}: ...
-                case {"head": "TERM_C", "body": ["^"]}: ...
+                case {"head": "TERM_C", "body": ["^"]}:
+                    # Symbol already on the stack, idk if something needs to be done here
+                    ...
                 case {"head": "FACTOR", "body": ["(", "EXPR", ")"]}: ...
-                case {"head": "FACTOR", "body": ["VALUE"]}: ...
+                case {"head": "FACTOR", "body": ["VALUE"]}:
+                    # Symbol already on the stack, idk if something needs to be done here
+                    ...
                 case {"head": "FLOW", "body": ["WHILE_STMT"]}: ...
                 case {"head": "FLOW", "body": ["IF_STMT"]}: ...
                 case {"head": "FLOW", "body": ["FOR_STMT"]}: ...
@@ -129,15 +166,18 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False):
                 case {"head": "COMMAND", "body": ["write", "VALUE", "WCHAIN"]}: ...
                 case {"head": "WCHAIN", "body": ["^"]}: ...
                 case {"head": "WCHAIN", "body": [", ", "VALUE", "WCHAIN"]}: ...
-                case {"head": "VALUE", "body": ["LITERAL"]}: ...
+                case {"head": "VALUE", "body": ["LITERAL"]}:
+                    # Symbol already on the stack, idk if something needs to be done here
+                    ...
                 case {"head": "VALUE", "body": ["id"]}:
                     # must get symbol from table
                     ...
                 case {"head": "LITERAL", "body": ["literal_int"]}:
+                    last_token = cur_stack[-1]
                     symbol_stack.append(Symbol(
                         name=f'__T_{temp_counter}',
                         type='i32',
-                        value=cur_input.value
+                        value=last_token.value
                     ))
                     temp_counter += 1
                 case {"head": "LITERAL", "body": ["literal_float"]}: ...
