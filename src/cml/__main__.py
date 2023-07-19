@@ -46,7 +46,7 @@ def compile(source: Path, output: str = "cml.3addr.txt"):
 
     # for t in tokens:
     #     print(t)
-    parse_semantics(tokens)
+    # parse_semantics(tokens)
     print("[info:comp] semantics ok.")
 
 

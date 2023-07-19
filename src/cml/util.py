@@ -62,9 +62,8 @@ class SymbolTable:
     scope_count: int = 0
 
     def __init__(self):
-        global_scope = dict()
-        self.scopes = [global_scope]
-        self.scope_list = [global_scope]
+        self.scopes = []
+        self.scope_list = []
 
     def insert(self, symbol: Symbol):
         cur_scope = self.scopes[::-1][0]
