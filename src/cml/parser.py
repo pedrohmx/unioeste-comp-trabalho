@@ -83,12 +83,14 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False, compile=False):
                 case {"head": "STMTS", "body": ["^"]}:
                     symbol_table.openScope()
                 case {"head": "STMTS", "body": ["STMTS", "STMT"]}: ...
-                case {"head": "STMT", "body": ["ATTRIB_STMT", ";"]}: ...
-                case {"head": "STMT", "body": ["FLOW"]}: ...
+                case {"head": "STMT", "body": ["ATTRIB_STMT", ";"]}:
+                    cur_stack = []
+                case {"head": "STMT", "body": ["FLOW"]}:
+                    cur_stack = []
                 case {"head": "STMT", "body": ["DECL_STMT", ";"]}:
                     cur_stack = []
-                    ...
-                case {"head": "STMT", "body": ["COMMAND", ";"]}: ...
+                case {"head": "STMT", "body": ["COMMAND", ";"]}:
+                    cur_stack = []
                 case {"head": "DECL_STMT", "body": ["type", "id", "DECL_END"]}:
                     # @FIXME: verificação de tipo???
                     # print(f'[debug] {symbol_stack=}')
@@ -129,24 +131,71 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False, compile=False):
                     ...
                 case {"head": "BOOL_EXPR", "body": ["not", "EXPR"]}: ...
                 case {"head": "BOOL_EXPR", "body": ["REL_EXPR", "BOOL_EXPR_C"]}:
-                    # Symbol already on the stack, idk if something needs to be done here
+                    cur_symbol = symbol_stack.pop()
+                    if cur_symbol.name == 'bool_op':
+                        rsymbol = symbol_stack.pop()
+                        lsymbol = symbol_stack.pop()
+
+                        code_buffer.append(f'{lsymbol.name} = {lsymbol.value}')
+                        code_buffer.append(f'{rsymbol.name} = {rsymbol.value}')
+
+                        tsymbol = Symbol(
+                            f'__T_{temp_counter}',
+                            # FIXME: TYPE SAFETY GOES HERE
+                            type=rsymbol.type if rsymbol.type == lsymbol.type else 'god_knows',
+                            value=f'{lsymbol.name} {cur_symbol.value} {rsymbol.name}'
+                            # value=rvalue + lvalue if cur_symbol.value == '+' else rvalue - lvalue
+                        )
+                        symbol_stack.append(tsymbol)
+                        temp_counter += 1
+                    else:
+                        symbol_stack.append(cur_symbol)
                     ...
                 case {"head": "BOOL_EXPR_C", "body": ["^"]}:
                     # Symbol already on the stack, idk if something needs to be done here
                     ...
-                case {"head": "BOOL_EXPR_C", "body": ["bool_op", "REL_EXPR"]}: ...
+                case {"head": "BOOL_EXPR_C", "body": ["bool_op", "REL_EXPR"]}:
+                    last_token = cur_stack[-2]
+                    symbol_stack.append(Symbol(
+                        'bool_op', 'bool_op', last_token.value
+                    ))
+                    cur_stack.pop()
+                    cur_stack.pop()
+
                 case {"head": "REL_EXPR", "body": ["ARITH_EXPR", "REL_EXPR_C"]}:
-                    # Symbol already on the stack, idk if something needs to be done here
+                    cur_symbol = symbol_stack.pop()
+                    if cur_symbol.name == 'rel_op':
+                        rsymbol = symbol_stack.pop()
+                        lsymbol = symbol_stack.pop()
+
+                        code_buffer.append(f'{lsymbol.name} = {lsymbol.value}')
+                        code_buffer.append(f'{rsymbol.name} = {rsymbol.value}')
+
+                        tsymbol = Symbol(
+                            f'__T_{temp_counter}',
+                            # FIXME: TYPE SAFETY GOES HERE
+                            type=rsymbol.type if rsymbol.type == lsymbol.type else 'god_knows',
+                            value=f'{lsymbol.name} {cur_symbol.value} {rsymbol.name}'
+                            # value=rvalue + lvalue if cur_symbol.value == '+' else rvalue - lvalue
+                        )
+                        symbol_stack.append(tsymbol)
+                        temp_counter += 1
+                    else:
+                        symbol_stack.append(cur_symbol)
                     ...
                 case {"head": "REL_EXPR_C", "body": ["^"]}:
                     # Symbol already on the stack, idk if something needs to be done here
                     ...
-                case {"head": "REL_EXPR_C", "body": ["rel_op", "ARITH_EXPR"]}: ...
-                case {"head": "ARITH_EXPR", "body": ["TERM", "ARITH_EXPR_C"]}:
-                    # Symbol already on the stack, idk if something needs to be done here
-                    # print('[debug:parse]')
-                    # pprint(symbol_stack)
+                case {"head": "REL_EXPR_C", "body": ["rel_op", "ARITH_EXPR"]}:
                     # pprint(cur_stack)
+                    last_token = cur_stack[-2]
+                    symbol_stack.append(Symbol(
+                        'rel_op', 'rel_op', last_token.value
+                    ))
+                    cur_stack.pop()
+                    cur_stack.pop()
+
+                case {"head": "ARITH_EXPR", "body": ["TERM", "ARITH_EXPR_C"]}:
                     cur_symbol = symbol_stack.pop()
                     if cur_symbol.name == 'arith_op_sum':
                         rsymbol = symbol_stack.pop()
@@ -166,20 +215,46 @@ def parse_syntax(tokens: list[Token], empty="^", verbose=False, compile=False):
                         temp_counter += 1
                     else:
                         symbol_stack.append(cur_symbol)
-                    ...
                 case {"head": "ARITH_EXPR_C", "body": ["arith_op_sum", "TERM"]}:
+                    # pprint(cur_stack)
                     last_token = cur_stack[-2]
                     symbol_stack.append(Symbol(
                         'arith_op_sum', 'arith_op_sum', last_token.value
                     ))
+                    cur_stack.pop()
+                    cur_stack.pop()
                     ...
                 case {"head": "ARITH_EXPR_C", "body": ["^"]}:
                     # Symbol already on the stack, idk if something needs to be done here
                     ...
                 case {"head": "TERM", "body": ["FACTOR", "TERM_C"]}:
-                    # Symbol already on the stack, idk if something needs to be done here
-                    ...
-                case {"head": "TERM_C", "body": ["arith_op_mul", "FACTOR"]}: ...
+                    cur_symbol = symbol_stack.pop()
+                    if cur_symbol.name == 'arith_op_mul':
+                        rsymbol = symbol_stack.pop()
+                        lsymbol = symbol_stack.pop()
+
+                        code_buffer.append(f'{lsymbol.name} = {lsymbol.value}')
+                        code_buffer.append(f'{rsymbol.name} = {rsymbol.value}')
+
+                        tsymbol = Symbol(
+                            f'__T_{temp_counter}',
+                            # FIXME: TYPE SAFETY GOES HERE
+                            type=rsymbol.type if rsymbol.type == lsymbol.type else 'god_knows',
+                            value=f'{lsymbol.name} {cur_symbol.value} {rsymbol.name}'
+                            # value=rvalue + lvalue if cur_symbol.value == '+' else rvalue - lvalue
+                        )
+                        symbol_stack.append(tsymbol)
+                        temp_counter += 1
+                    else:
+                        symbol_stack.append(cur_symbol)
+
+                case {"head": "TERM_C", "body": ["arith_op_mul", "FACTOR"]}:
+                    last_token = cur_stack[-2]
+                    symbol_stack.append(Symbol(
+                        'arith_op_mul', 'arith_op_mul', last_token.value
+                    ))
+                    cur_stack.pop()
+                    cur_stack.pop()
                 case {"head": "TERM_C", "body": ["^"]}:
                     # Symbol already on the stack, idk if something needs to be done here
                     ...
